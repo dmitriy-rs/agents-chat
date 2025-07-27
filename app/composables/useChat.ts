@@ -7,6 +7,8 @@ export default function useChat() {
 
   const messages = computed<ChatMessage[]>(() => chat.value.messages)
 
+  const isEmpty = computed(() => messages.value.length === 0)
+
   function createMessage(
     message: string,
     role: ChatMessage['role'],
@@ -31,6 +33,7 @@ export default function useChat() {
   return {
     chat,
     messages,
+    isEmpty,
 
     sendMessage,
   }

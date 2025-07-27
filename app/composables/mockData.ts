@@ -5,8 +5,7 @@ const MOCK_MESSAGES: ChatMessage[] = [
   {
     id: '1',
     role: 'user',
-    content:
-      'Hello, can you help me with my Nuxt.js project?',
+    content: 'Hello, can you help me with my Nuxt.js project?',
   },
   {
     id: '2',
