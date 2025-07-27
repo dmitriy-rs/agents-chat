@@ -9,7 +9,8 @@ const { messages } = useChat()
       :key="message.id"
       class="p-4 rounded-sm transition-all duration-200"
       :class="{
-        'bg-muted border border-muted w-[70%] self-end': message.role === 'user',
+        'bg-muted border border-muted w-[70%] self-end':
+          message.role === 'user',
         'w-full py-4': message.role === 'assistant',
       }"
     >
