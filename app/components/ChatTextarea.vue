@@ -16,9 +16,9 @@ async function adjustTextareaHeight() {
 }
 
 function onEnterPress() {
-    emit('enter')
-    valueModel.value = ""
-    adjustTextareaHeight()
+  emit('enter')
+  valueModel.value = ''
+  adjustTextareaHeight()
 }
 
 whenever(
