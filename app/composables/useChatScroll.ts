@@ -1,56 +1,16 @@
-import type { ShallowRef } from 'vue'
+export default function useChatScroll() {
+  const { messages } = useChat()
 
-export default function useChatScroll(
-  container: ShallowRef<HTMLDivElement | null>,
-) {
-  const smooth = ref(true)
-  const behavior = computed(() => (smooth.value ? 'smooth' : 'auto'))
+  const containerRef = useTemplateRef<HTMLDivElement>('scrollContainer')
+  const { isAtBottom, scrollToBottom, pinToBottom } =
+    useScrollToBottom(containerRef)
 
-  const { arrivedState, y } = useScroll(container, {
-    behavior,
-    observe: true,
-  })
+  const shouldShowScrollButton = computed(() => !isAtBottom.value)
 
-  const isAtBottom = computed(() => {
-    if (!container.value) return true
-    return arrivedState.bottom
-  })
-  const shoulShowScrollButton = computed(() => !isAtBottom.value)
-
-  const bottomTop = () =>
-    container.value
-      ? container.value.scrollHeight - container.value.clientHeight
-      : 0
-
-  function scrollToBottom(immediate = false) {
-    if (!container.value) return
-    if (immediate) {
-      smooth.value = false
-      y.value = bottomTop()
-      nextTick(() => (smooth.value = true))
-    } else {
-      y.value = bottomTop()
-    }
-  }
-
-  async function pinToBottom() {
-    if (isAtBottom.value && container.value) {
-      await nextTick()
-      scrollToBottom(true)
-    }
-  }
-
-  onMounted(() => {
-    nextTick(() => {
-      scrollToBottom(true)
-    })
-  })
+  watchDeep(messages, pinToBottom)
 
   return {
-    isAtBottom,
-    shoulShowScrollButton,
-
+    shouldShowScrollButton,
     scrollToBottom,
-    pinToBottom,
   }
 }
