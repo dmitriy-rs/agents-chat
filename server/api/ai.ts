@@ -1,4 +1,4 @@
-import { generateChatResponse } from "./services/ai/llm"
+import { generateTextResponse } from "./services/ai/llm"
 import { createOpenAIModel } from "./services/ai/model"
 
 export default defineEventHandler(async (event) => {
@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     const id = messages.length.toString()
 
     const openaiModel = createOpenAIModel()
-    const response = await generateChatResponse(openaiModel, messages)
+    const response = await generateTextResponse(openaiModel, messages)
 
     return {
         id,
