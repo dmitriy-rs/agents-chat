@@ -28,8 +28,8 @@ export default function useChat() {
     const data = await $fetch<ChatMessage>('/api/ai', {
       method: 'POST',
       body: {
-        messages: messages.value
-      }
+        messages: messages.value,
+      },
     })
 
     messages.value.push(data)
