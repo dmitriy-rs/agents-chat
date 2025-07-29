@@ -25,6 +25,8 @@ const { messages, isLoading } = useChat()
       </div>
     </div>
 
-    <span v-if="isLoading" class="inline-block animate-pulse ml-1"> &#9611; </span>
+    <span v-if="isLoading" class="inline-block animate-pulse ml-1">
+      &#9611;
+    </span>
   </div>
 </template>

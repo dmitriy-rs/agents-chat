@@ -17,7 +17,6 @@
     "@nuxt/eslint": "1.7.1",
     "@nuxt/ui": "^3.3.0",
     "@vueuse/core": "^13.6.0",
-    "@vueuse/nuxt": "13.5.0",
     "ai": "5.0.0-beta.29",
     "eslint": "^9.32.0",
     "nuxt": "^4.0.1",
@@ -25,7 +24,9 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@nuxtjs/mdc": "^0.17.2",
     "@prettier/plugin-oxc": "^0.0.4",
+    "@vueuse/nuxt": "13.6.0",
     "husky": "^9.1.7",
     "prettier": "^3.6.2"
   }

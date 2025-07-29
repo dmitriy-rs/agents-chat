@@ -9,9 +9,9 @@ const MOCK_MESSAGES: UIMessage[] = [
     parts: [
       {
         type: 'text',
-        text: 'Hello, can you help me with my Nuxt.js project?'
-      }
-    ]
+        text: 'Hello, can you help me with my Nuxt.js project?',
+      },
+    ],
   },
   {
     id: '2',
@@ -19,9 +19,9 @@ const MOCK_MESSAGES: UIMessage[] = [
     parts: [
       {
         type: 'text',
-        text: "Of course! I'd be happy to help with your Nuxt.js project. What specific questions or issues do you have?"
-      }
-    ]
+        text: "Of course! I'd be happy to help with your Nuxt.js project. What specific questions or issues do you have?",
+      },
+    ],
   },
   {
     id: '3',
@@ -29,9 +29,9 @@ const MOCK_MESSAGES: UIMessage[] = [
     parts: [
       {
         type: 'text',
-        text: 'How do I implement server-side rendering?'
-      }
-    ]
+        text: 'How do I implement server-side rendering?',
+      },
+    ],
   },
   {
     id: '4',
@@ -39,9 +39,9 @@ const MOCK_MESSAGES: UIMessage[] = [
     parts: [
       {
         type: 'text',
-        text:  "Nuxt.js provides server-side rendering out of the box! You don't need to do any special configuration for basic SSR. If you need specific optimizations, we can discuss those in detail.",
-      }
-    ]
+        text: "Nuxt.js provides server-side rendering out of the box! You don't need to do any special configuration for basic SSR. If you need specific optimizations, we can discuss those in detail.",
+      },
+    ],
   },
 ]
 
