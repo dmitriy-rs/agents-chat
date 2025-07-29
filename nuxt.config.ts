@@ -16,6 +16,19 @@ export default defineNuxtConfig({
     openaiApiKey: ''
   },
 
+  mdc: {
+    highlight: {
+      theme: 'material-theme-palenight',
+      langs: [
+        'html',
+        'markdown',
+        'vue',
+        'typescript',
+        'javascript',
+      ],
+    },
+  },
+
   vite: {
     optimizeDeps: {
       include: ['debug']
