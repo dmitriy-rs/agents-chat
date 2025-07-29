@@ -1,31 +1,36 @@
 import type { Chat } from '~/types'
 import { MOCK_CHAT } from './mockData'
-import type { ChatMessage } from '../types'
+import type { UIMessage } from 'ai'
+import { createSharedComposable } from '@vueuse/core'
 
-export default function useChat() {
+function useChat() {
   const chat = ref<Chat>(MOCK_CHAT)
+  const isLoading = ref(false)
 
-  const messages = computed<ChatMessage[]>(() => chat.value.messages)
+  const messages = computed<UIMessage[]>(() => chat.value.messages)
 
   const isEmpty = computed(() => messages.value.length === 0)
 
-  function createMessage(
-    message: string,
-    role: ChatMessage['role'],
-  ): ChatMessage {
+  function createMessage(message: string, role: UIMessage['role']): UIMessage {
     const id = messages.value.length.toString()
 
     return {
       id,
       role,
-      content: message,
+      parts: [
+        {
+          type: 'text',
+          text: message,
+        },
+      ],
     }
   }
 
   async function sendMessage(message: string) {
+    isLoading.value = true
     messages.value.push(createMessage(message, 'user'))
 
-    const data = await $fetch<ChatMessage>('/api/ai', {
+    const data = await $fetch<UIMessage>('/api/ai', {
       method: 'POST',
       body: {
         messages: messages.value,
@@ -33,13 +38,17 @@ export default function useChat() {
     })
 
     messages.value.push(data)
+    isLoading.value = false
   }
 
   return {
     chat,
     messages,
     isEmpty,
+    isLoading,
 
     sendMessage,
   }
 }
+
+export default createSharedComposable(useChat)

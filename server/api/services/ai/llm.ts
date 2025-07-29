@@ -1,11 +1,13 @@
-import type { ModelMessage } from "ai";
+import type { UIMessage } from "ai";
 import type { LanguageModelV2 } from '@ai-sdk/provider';
-import { generateText } from "ai";
+import { convertToModelMessages, generateText } from "ai";
 
-export async function generateChatResponse(model: LanguageModelV2, messages: ModelMessage[]) {
+export async function generateChatResponse(model: LanguageModelV2, messages: UIMessage[]) {
+    const modelMessages = convertToModelMessages(messages)
+
     const response = await generateText({
         model,
-        messages
+        messages: modelMessages
     })
 
     return response.text.trim()

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { messages } = useChat()
+const { messages, isLoading } = useChat()
 </script>
 
 <template>
@@ -14,9 +14,17 @@ const { messages } = useChat()
         'w-full py-4': message.role === 'assistant',
       }"
     >
-      <div class="break-words whitespace-pre-wrap">
-        {{ message.content }}
+      <div
+        v-for="(part, index) of message.parts"
+        :key="index"
+        class="break-words whitespace-pre-wrap"
+      >
+        <span v-if="part.type === 'text'">
+          {{ part.text }}
+        </span>
       </div>
     </div>
+
+    <span v-if="isLoading" class="inline-block animate-pulse ml-1"> &#9611; </span>
   </div>
 </template>
