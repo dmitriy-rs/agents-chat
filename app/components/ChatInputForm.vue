@@ -1,16 +1,18 @@
 <script setup lang="ts">
-const { isStreaming = false } = defineProps<{
-  isStreaming?: boolean
+const { isPending = false } = defineProps<{
+  isPending?: boolean
+}>()
+const emit = defineEmits<{
+  (e: 'send-message', message: string): void
 }>()
 
-const { sendMessage } = useChat()
 const message = ref('')
 
 function onMessageSend() {
-  if (!message.value || isStreaming) {
+  if (!message.value || isPending) {
     return
   }
-  sendMessage(message.value)
+  emit('send-message', message.value)
 }
 </script>
 
@@ -21,13 +23,13 @@ function onMessageSend() {
   >
     <ChatTextarea
       v-model="message"
-      :disabled="isStreaming"
+      :disabled="isPending"
       @enter="onMessageSend"
     />
 
     <UButton
       type="submit"
-      :disabled="!message || isStreaming"
+      :disabled="!message || isPending"
       color="primary"
       variant="solid"
       icon="i-heroicons-paper-airplane"

@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const { messages, isLoading } = useChat()
+import type { UIMessage } from 'ai'
+defineProps<{
+  messages: UIMessage[]
+  isPending?: boolean
+}>()
 </script>
 
 <template>
@@ -25,7 +29,7 @@ const { messages, isLoading } = useChat()
       </div>
     </div>
 
-    <span v-if="isLoading" class="inline-block animate-pulse ml-1">
+    <span v-if="isPending" class="inline-block animate-pulse ml-1">
       &#9611;
     </span>
   </div>

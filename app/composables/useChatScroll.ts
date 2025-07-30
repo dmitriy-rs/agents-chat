@@ -1,6 +1,6 @@
-export default function useChatScroll() {
-  const { messages } = useChat()
+import type { UIMessage } from 'ai'
 
+export default function useChatScroll(messages: MaybeRefOrGetter<UIMessage[]>) {
   const containerRef = useTemplateRef<HTMLDivElement>('scrollContainer')
   const { isAtBottom, scrollToBottom, pinToBottom } =
     useScrollToBottom(containerRef)

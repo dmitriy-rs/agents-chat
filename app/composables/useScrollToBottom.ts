@@ -34,8 +34,10 @@ export default function useScrollToBottom(
 
   async function pinToBottom() {
     if (isAtBottom.value && container.value) {
-      await nextTick()
-      scrollToBottom(true)
+      // TODO: MardownRenderer is a shit
+      setTimeout(() => {
+        scrollToBottom(true)
+      }, 50)
     }
   }
 

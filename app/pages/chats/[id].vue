@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { chat } = useChat()
+const { chat, messages } = useChatQuery()
 
 const appConfig = useAppConfig()
 const title = computed(() =>
@@ -14,5 +14,5 @@ useHead({
 </script>
 
 <template>
-  <ChatWindow />
+  <ChatWindow :id="chat.id" :title="chat.title" :messages />
 </template>
