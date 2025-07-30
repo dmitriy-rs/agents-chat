@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const { chat, messages } = useChatQuery()
+definePageMeta({
+  layout: false,
+})
+const route = useRoute()
+const { chat, messages } = useChat(route.params.id as string)
 
 const appConfig = useAppConfig()
 const title = computed(() =>
@@ -7,12 +11,15 @@ const title = computed(() =>
     ? [chat.value.title, appConfig.title].join(' - ')
     : appConfig.title,
 )
-
 useHead({
   title,
 })
 </script>
 
 <template>
-  <ChatWindow :id="chat.id" :title="chat.title" :messages />
+  <NuxtLayout name="no-header">
+    <AppHeader :title="chat?.title" />
+
+    <ChatWindow v-if="chat" :id="chat.id" :title="chat.title" :messages />
+  </NuxtLayout>
 </template>
