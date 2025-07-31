@@ -5,13 +5,21 @@ export default function useChats() {
 
   function createChat() {
     const id = (chats.value.length + 1).toString()
-    const chat = {
+    const chat: Chat = {
       id,
-      title: 'New Chat',
+      title: `Chat ${id}`,
       messages: [],
+      projectId: undefined,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     }
     chats.value.push(chat)
+    navigateTo(`/chats/${id}`)
   }
 
-  return { chats, createChat }
+  function chatsInProject(projectId: string) {
+    return chats.value.filter((c) => c.projectId === projectId)
+  }
+
+  return { chats, createChat, chatsInProject }
 }

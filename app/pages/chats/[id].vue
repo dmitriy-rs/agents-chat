@@ -3,7 +3,13 @@ definePageMeta({
   layout: false,
 })
 const route = useRoute()
-const { chat, messages } = useChat(route.params.id as string)
+const { chat, messages, sendMessage, isPending } = useChat(
+  route.params.id as string,
+)
+
+if (!chat.value) {
+  await navigateTo('/', { replace: true })
+}
 
 const appConfig = useAppConfig()
 const title = computed(() =>
@@ -17,9 +23,16 @@ useHead({
 </script>
 
 <template>
-  <NuxtLayout name="no-header">
-    <AppHeader :title="chat?.title" />
+  <NuxtLayout v-if="chat" name="no-header">
+    <AppHeader :title="chat.title" />
+    <AppSidebar />
 
-    <ChatWindow v-if="chat" :id="chat.id" :title="chat.title" :messages />
+    <ChatWindow
+      :id="chat.id"
+      :title="chat.title"
+      :messages
+      :is-pending
+      @send-message="sendMessage"
+    />
   </NuxtLayout>
 </template>
