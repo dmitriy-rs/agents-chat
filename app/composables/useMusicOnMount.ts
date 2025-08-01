@@ -1,55 +1,39 @@
-import { onMounted, onUnmounted, ref, readonly } from 'vue'
 import type { MelodyConfig } from '~/utils/musicUtils'
 
-export const useMusicOnMount = (
-  melodyConfigs: MelodyConfig | MelodyConfig[],
-) => {
-  let configs: MelodyConfig[] = Array.isArray(melodyConfigs)
-    ? [...melodyConfigs]
-    : [melodyConfigs]
-
-  let musicInstances: ReturnType<typeof useRetroMusic>[] = configs.map((c) =>
-    useRetroMusic(c),
-  )
+export default function useMusicOnMount(initialMelodyConfigs: MelodyConfig[]) {
+  const player = useMusicPlayer()
 
   const hasStarted = ref(false)
 
-  const startMusic = () => {
-    if (hasStarted.value) return
-    musicInstances.forEach((inst) => inst.startMusic())
+  const startMusic = async (
+    melodyConfigs: MelodyConfig[] = initialMelodyConfigs,
+  ) => {
+    await player.startMusic(melodyConfigs)
     hasStarted.value = true
   }
 
-  const stopMusic = (fadeSeconds = 0.5) => {
-    musicInstances.forEach((inst) => inst.stopMusic(fadeSeconds))
-    hasStarted.value = false
+  const pauseMusic = (fadeSeconds = 0.5) => {
+    player.pauseMusic(fadeSeconds)
   }
 
-  const updateMelodies = (newConfigs: MelodyConfig | MelodyConfig[]) => {
-    const wasPlaying = hasStarted.value
-    stopMusic()
-    configs = Array.isArray(newConfigs) ? [...newConfigs] : [newConfigs]
-    musicInstances = configs.map((c) => useRetroMusic(c))
-    if (wasPlaying) startMusic()
-  }
+  useEventListener('click', () => startMusic(), { once: true })
+  useEventListener('keydown', () => startMusic(), { once: true })
+  useEventListener('touchstart', () => startMusic(), { once: true })
 
-  useEventListener('click', startMusic, { once: true })
-  useEventListener('keydown', startMusic, { once: true })
-  useEventListener('touchstart', startMusic, { once: true })
-
-  onMounted(() => {
-    try {
-      startMusic()
-    } catch {
-      // ignore
-    }
-  })
-
-  onUnmounted(() => stopMusic())
+  // onMounted(() => {
+  //   try {
+  //     startMusic()
+  //   } catch {
+  //     // ignore
+  //     hasStarted.value = false
+  //   }
+  // })
 
   return {
     hasStarted: readonly(hasStarted),
-    updateMelodies,
-    stopMusic,
+    pauseMusic,
+    restartMusic: player.restartMusic,
+    startMusic,
+    isPlaying: player.isPlaying,
   }
 }
