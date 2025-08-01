@@ -1,25 +1,55 @@
+import { onMounted, onUnmounted, ref, readonly } from 'vue'
 import type { MelodyConfig } from '~/utils/musicUtils'
 
 export const useMusicOnMount = (
   melodyConfigs: MelodyConfig | MelodyConfig[],
 ) => {
-  const configs = Array.isArray(melodyConfigs) ? melodyConfigs : [melodyConfigs]
-  const musicInstances = configs.map((config) => useRetroMusic(config))
+  let configs: MelodyConfig[] = Array.isArray(melodyConfigs)
+    ? [...melodyConfigs]
+    : [melodyConfigs]
+
+  let musicInstances: ReturnType<typeof useRetroMusic>[] = configs.map((c) =>
+    useRetroMusic(c),
+  )
 
   const hasStarted = ref(false)
 
-  const startMusicOnce = () => {
+  const startMusic = () => {
     if (hasStarted.value) return
-
-    musicInstances.forEach(({ startMusic }) => startMusic())
+    musicInstances.forEach((inst) => inst.startMusic())
     hasStarted.value = true
   }
 
-  useEventListener('click', startMusicOnce, { once: true })
-  useEventListener('keydown', startMusicOnce, { once: true })
-  useEventListener('touchstart', startMusicOnce, { once: true })
+  const stopMusic = (fadeSeconds = 0.5) => {
+    musicInstances.forEach((inst) => inst.stopMusic(fadeSeconds))
+    hasStarted.value = false
+  }
+
+  const updateMelodies = (newConfigs: MelodyConfig | MelodyConfig[]) => {
+    const wasPlaying = hasStarted.value
+    stopMusic()
+    configs = Array.isArray(newConfigs) ? [...newConfigs] : [newConfigs]
+    musicInstances = configs.map((c) => useRetroMusic(c))
+    if (wasPlaying) startMusic()
+  }
+
+  useEventListener('click', startMusic, { once: true })
+  useEventListener('keydown', startMusic, { once: true })
+  useEventListener('touchstart', startMusic, { once: true })
+
+  onMounted(() => {
+    try {
+      startMusic()
+    } catch {
+      // ignore
+    }
+  })
+
+  onUnmounted(() => stopMusic())
 
   return {
     hasStarted: readonly(hasStarted),
+    updateMelodies,
+    stopMusic,
   }
 }

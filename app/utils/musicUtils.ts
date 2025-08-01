@@ -6,8 +6,8 @@ export interface MelodyNote {
 export interface MelodyConfig {
   name: string
   notes: readonly MelodyNote[]
-  tempo: number // Time between notes in ms
-  volume: number // 0-1
+  tempo: number
+  volume: number
   waveType: 'triangle' | 'sine' | 'square' | 'sawtooth'
   modulator?: {
     type: 'sine' | 'square' | 'triangle' | 'sawtooth'
@@ -21,71 +21,274 @@ export interface MelodyConfig {
   }
 }
 
-const adventureBegins: MelodyConfig = {
-  name: 'Gentle Adventure',
+const eightBitAdventureLead: MelodyConfig = {
+  name: '8-Bit Adventure Lead',
   notes: [
-    // Soft opening - gentle anticipation
-    { note: 'C4', duration: 2400 },
-    { note: 'E4', duration: 2400 },
-    { note: 'G4', duration: 3200 },
+    { note: 'C4', duration: 500 },
+    { note: 'E4', duration: 500 },
+    { note: 'G4', duration: 500 },
+    { note: 'C5', duration: 700 },
 
-    // Calm adventure motif
-    { note: 'A4', duration: 2000 },
-    { note: 'G4', duration: 2000 },
-    { note: 'E4', duration: 2400 },
-    { note: 'F4', duration: 3200 },
-
-    // Peaceful resolution
-    { note: 'G4', duration: 2400 },
-    { note: 'F4', duration: 2400 },
-    { note: 'E4', duration: 2400 },
-    { note: 'D4', duration: 3200 },
-    { note: 'C4', duration: 4800 }, // Gentle ending
+    { note: 'B4', duration: 500 },
+    { note: 'G4', duration: 500 },
+    { note: 'D4', duration: 500 },
+    { note: 'G4', duration: 700 },
   ],
-  tempo: 2800, // Much slower for ambient feel
-  volume: 0.12, // Quiet background volume
-  waveType: 'sine', // Softest waveform
+  tempo: 500, // Snappy 8-bit tempo
+  volume: 0.14,
+  waveType: 'triangle', // Softer chiptune wave
   modulator: {
-    type: 'sine',
-    frequency: 0.8, // Very slow, subtle modulation
-    depth: 15, // Gentle effect
-    param: 'detune',
+    type: 'triangle',
+    frequency: 4, // Gentle vibrato
+    depth: 15,
+    param: 'frequency',
   },
   filter: {
     type: 'lowpass',
-    frequency: 500, // Heavy filtering for soft ambient sound
+    frequency: 1600, // Allow more treble
   },
 }
 
-// Gentle bass harmony
-const adventureBass: MelodyConfig = {
-  name: 'Gentle Bass',
+const eightBitAdventureBass: MelodyConfig = {
+  name: '8-Bit Adventure Bass',
   notes: [
-    { note: 'C2', duration: 4800 }, // Deep, sustained bass notes
-    { note: 'F2', duration: 4800 },
-    { note: 'G2', duration: 4800 },
-    { note: 'C2', duration: 6400 }, // Long resolution
-    { note: 'A1', duration: 4800 },
-    { note: 'D2', duration: 4800 },
-    { note: 'G1', duration: 4800 },
-    { note: 'C2', duration: 9600 }, // Very long sustain
+    { note: 'C2', duration: 1000 },
+    { note: 'C2', duration: 1000 },
+    { note: 'D2', duration: 1000 },
+    { note: 'E2', duration: 1000 },
+
+    { note: 'G1', duration: 1000 },
+    { note: 'G1', duration: 1000 },
+    { note: 'A1', duration: 1000 },
+    { note: 'B1', duration: 1000 },
   ],
-  tempo: 4800, // Very slow bass rhythm
-  volume: 0.08, // Very quiet bass
-  waveType: 'sine', // Smoothest bass
-  modulator: {
-    type: 'sine',
-    frequency: 0.3, // Very slow modulation
-    depth: 10, // Minimal effect
-    param: 'detune',
-  },
+  tempo: 1000, // Half-time to the lead
+  volume: 0.12,
+  waveType: 'triangle', // Softer low-end
   filter: {
     type: 'lowpass',
-    frequency: 200, // Very deep, muffled bass
+    frequency: 700, // Brighter bass
   },
+}
+
+const chipQuestLead: MelodyConfig = {
+  name: 'Chiptune Quest Lead',
+  notes: [
+    { note: 'E4', duration: 600 },
+    { note: 'G4', duration: 600 },
+    { note: 'B4', duration: 600 },
+    { note: 'E5', duration: 800 },
+
+    { note: 'D5', duration: 600 },
+    { note: 'B4', duration: 600 },
+    { note: 'G4', duration: 600 },
+    { note: 'E4', duration: 800 },
+  ],
+  tempo: 600,
+  volume: 0.15,
+  waveType: 'square',
+  filter: {
+    type: 'lowpass',
+    frequency: 1800,
+  },
+}
+
+const chipQuestBass: MelodyConfig = {
+  name: 'Chiptune Quest Bass',
+  notes: [
+    { note: 'E2', duration: 1200 },
+    { note: 'E2', duration: 1200 },
+    { note: 'G2', duration: 1200 },
+    { note: 'B1', duration: 1200 },
+  ],
+  tempo: 1200,
+  volume: 0.1,
+  waveType: 'triangle',
+  filter: {
+    type: 'lowpass',
+    frequency: 700,
+  },
+}
+
+const retroVoyageLead: MelodyConfig = {
+  name: 'Retro Voyage Lead',
+  notes: [
+    { note: 'A4', duration: 700 },
+    { note: 'C5', duration: 700 },
+    { note: 'E5', duration: 700 },
+    { note: 'A5', duration: 900 },
+
+    { note: 'G5', duration: 700 },
+    { note: 'E5', duration: 700 },
+    { note: 'C5', duration: 700 },
+    { note: 'A4', duration: 900 },
+  ],
+  tempo: 700,
+  volume: 0.13,
+  waveType: 'square',
+  filter: { type: 'lowpass', frequency: 1500 },
+}
+
+const retroVoyageBass: MelodyConfig = {
+  name: 'Retro Voyage Bass',
+  notes: [
+    { note: 'A2', duration: 1400 },
+    { note: 'A2', duration: 1400 },
+    { note: 'C3', duration: 1400 },
+    { note: 'E2', duration: 1400 },
+  ],
+  tempo: 1400,
+  volume: 0.1,
+  waveType: 'triangle',
+  filter: { type: 'lowpass', frequency: 650 },
+}
+
+const pixelDreamLead: MelodyConfig = {
+  name: 'Pixel Dream Lead',
+  notes: [
+    { note: 'D4', duration: 550 },
+    { note: 'F#4', duration: 550 },
+    { note: 'A4', duration: 550 },
+    { note: 'D5', duration: 750 },
+
+    { note: 'C#5', duration: 550 },
+    { note: 'A4', duration: 550 },
+    { note: 'F#4', duration: 550 },
+    { note: 'D4', duration: 750 },
+  ],
+  tempo: 550,
+  volume: 0.14,
+  waveType: 'square',
+  filter: { type: 'lowpass', frequency: 1700 },
+}
+
+const pixelDreamBass: MelodyConfig = {
+  name: 'Pixel Dream Bass',
+  notes: [
+    { note: 'D2', duration: 1100 },
+    { note: 'D2', duration: 1100 },
+    { note: 'F#2', duration: 1100 },
+    { note: 'A1', duration: 1100 },
+  ],
+  tempo: 1100,
+  volume: 0.09,
+  waveType: 'triangle',
+  filter: { type: 'lowpass', frequency: 600 },
+}
+
+const spaceOdysseyLead: MelodyConfig = {
+  name: 'Space Odyssey Lead',
+  notes: [
+    { note: 'E4', duration: 600 },
+    { note: 'D#4', duration: 600 },
+    { note: 'B3', duration: 600 },
+    { note: 'G3', duration: 900 },
+
+    { note: 'A3', duration: 600 },
+    { note: 'B3', duration: 600 },
+    { note: 'D4', duration: 600 },
+    { note: 'E4', duration: 900 },
+  ],
+  tempo: 600,
+  volume: 0.16,
+  waveType: 'square',
+  filter: { type: 'lowpass', frequency: 1700 },
+}
+
+const spaceOdysseyBass: MelodyConfig = {
+  name: 'Space Odyssey Bass',
+  notes: [
+    { note: 'E2', duration: 1200 },
+    { note: 'E2', duration: 1200 },
+    { note: 'G2', duration: 1200 },
+    { note: 'B1', duration: 1200 },
+  ],
+  tempo: 1200,
+  volume: 0.09,
+  waveType: 'triangle',
+  filter: { type: 'lowpass', frequency: 600 },
+}
+
+const forestWhispersLead: MelodyConfig = {
+  name: 'Forest Whispers Lead',
+  notes: [
+    { note: 'C4', duration: 700 },
+    { note: 'E4', duration: 700 },
+    { note: 'G4', duration: 700 },
+    { note: 'B4', duration: 900 },
+
+    { note: 'A4', duration: 700 },
+    { note: 'G4', duration: 700 },
+    { note: 'E4', duration: 700 },
+    { note: 'C4', duration: 900 },
+  ],
+  tempo: 700,
+  volume: 0.15,
+  waveType: 'triangle',
+  filter: { type: 'lowpass', frequency: 1500 },
+}
+
+const forestWhispersBass: MelodyConfig = {
+  name: 'Forest Whispers Bass',
+  notes: [
+    { note: 'C2', duration: 1400 },
+    { note: 'C2', duration: 1400 },
+    { note: 'E2', duration: 1400 },
+    { note: 'G1', duration: 1400 },
+  ],
+  tempo: 1400,
+  volume: 0.09,
+  waveType: 'sine',
+  filter: { type: 'lowpass', frequency: 500 },
+}
+
+const cyberPulseLead: MelodyConfig = {
+  name: 'Cyber Pulse Lead',
+  notes: [
+    { note: 'F#4', duration: 500 },
+    { note: 'A4', duration: 500 },
+    { note: 'C#5', duration: 500 },
+    { note: 'F#5', duration: 700 },
+
+    { note: 'E5', duration: 500 },
+    { note: 'C#5', duration: 500 },
+    { note: 'A4', duration: 500 },
+    { note: 'F#4', duration: 700 },
+  ],
+  tempo: 500,
+  volume: 0.17,
+  waveType: 'square',
+  modulator: { type: 'triangle', frequency: 6, depth: 25, param: 'frequency' },
+  filter: { type: 'highpass', frequency: 900 },
+}
+
+const cyberPulseBass: MelodyConfig = {
+  name: 'Cyber Pulse Bass',
+  notes: [
+    { note: 'F#2', duration: 1000 },
+    { note: 'F#2', duration: 1000 },
+    { note: 'A1', duration: 1000 },
+    { note: 'C#2', duration: 1000 },
+  ],
+  tempo: 1000,
+  volume: 0.1,
+  waveType: 'triangle',
+  filter: { type: 'lowpass', frequency: 650 },
 }
 
 export const melodies = {
-  adventureBegins,
-  adventureBass,
+  eightBitAdventureLead,
+  eightBitAdventureBass,
+  chipQuestLead,
+  chipQuestBass,
+  retroVoyageLead,
+  retroVoyageBass,
+  pixelDreamLead,
+  pixelDreamBass,
+  spaceOdysseyLead,
+  spaceOdysseyBass,
+  forestWhispersLead,
+  forestWhispersBass,
+  cyberPulseLead,
+  cyberPulseBass,
 } as const

@@ -90,20 +90,36 @@ export const useRetroMusic = (melodyConfig: MelodyConfig) => {
     isPlaying.value = true
   }
 
-  const stopMusic = () => {
+  const stopMusic = (fadeSeconds = 0.5) => {
+    if (!audioContext) return
+
+    // Stop scheduling new notes immediately
     if (songInterval) {
       clearInterval(songInterval)
       songInterval = null
     }
 
+    // Smoothly fade out
+    if (masterVolume) {
+      const now = audioContext.currentTime
+      masterVolume.gain.cancelScheduledValues(now)
+      masterVolume.gain.setValueAtTime(masterVolume.gain.value, now)
+      masterVolume.gain.linearRampToValueAtTime(0, now + fadeSeconds)
+    }
+
     isPlaying.value = false
+
+    // Close AudioContext after fade completes to avoid click/pop
+    setTimeout(
+      () => {
+        audioContext?.close()
+      },
+      fadeSeconds * 1000 + 50,
+    )
   }
 
   onUnmounted(() => {
     stopMusic()
-    if (audioContext) {
-      audioContext.close()
-    }
   })
 
   return {
