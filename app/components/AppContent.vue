@@ -4,7 +4,7 @@ const { isOpen } = useAppSidebar()
 
 <template>
   <main
-    class="main-content transition-all duration-300 ease-in-out"
+    class="h-full mt-16 transition-all duration-300 ease-in-out"
     :class="{
       'ml-64': isOpen,
     }"

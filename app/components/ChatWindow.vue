@@ -26,7 +26,7 @@ const { shouldShowScrollButton, scrollToBottom } = useChatScroll(props.messages)
         <ChatInputForm :is-pending @send-message="sendMessage" />
       </ChatEmptyState>
 
-      <div v-else class="py-20">
+      <div v-else class="py-4">
         <ChatMessages :messages :is-pending />
 
         <div class="fixed bottom-6 max-w-4xl w-[calc(100%-3rem)] z-10">

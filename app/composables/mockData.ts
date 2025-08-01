@@ -52,6 +52,7 @@ const MOCK_CHAT: Chat = {
   messages: [...MOCK_MESSAGES],
   createdAt: new Date(),
   updatedAt: new Date(),
+  projectId: '1',
 }
 
 const MOCK_PROJECT: Project = {

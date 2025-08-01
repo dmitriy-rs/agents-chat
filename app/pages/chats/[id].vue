@@ -11,21 +11,12 @@ if (!chat.value) {
   await navigateTo('/', { replace: true })
 }
 
-const appConfig = useAppConfig()
-const title = computed(() =>
-  chat.value?.title
-    ? [chat.value.title, appConfig.title].join(' - ')
-    : appConfig.title,
-)
-useHead({
-  title,
-})
+useChatPageHead(chat)
 </script>
 
 <template>
   <NuxtLayout v-if="chat" name="no-header">
     <AppHeader :title="chat.title" />
-    <AppSidebar />
 
     <ChatWindow
       :id="chat.id"
