@@ -20,7 +20,10 @@ const { shouldShowScrollButton, scrollToBottom } = useChatScroll(props.messages)
 </script>
 
 <template>
-  <div ref="scrollContainer" class="overflow-y-auto h-full w-full box-border">
+  <div
+    ref="scrollContainer"
+    class="overflow-y-auto h-full w-full box-border font-mono"
+  >
     <UContainer class="max-w-4xl h-full space-y-6">
       <ChatEmptyState v-if="isEmpty">
         <ChatInputForm :is-pending @send-message="sendMessage" />

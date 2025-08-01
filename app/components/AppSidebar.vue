@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { isOpen } = useAppSidebar()
 
+const { createChat } = useChats()
 const { createProject } = useProjects()
 
 const { projects } = useAppSidebarProjects()
@@ -16,27 +17,23 @@ const { chats } = useAppSidebarChats()
       v-if="projects.length > 0"
       class="overflow-y-auto p-4 border-b border-muted"
     >
-      <div class="mb-4">
-        <div class="flex justify-between items-center mb-2">
-          <h2 class="text-sm font-semibold text-muted">Projects</h2>
-        </div>
-        <UNavigationMenu
-          orientation="vertical"
-          class="w-full mb-2"
-          :items="projects"
-          default-open
-        />
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="text-sm font-semibold text-muted">Projects</h2>
+
         <UButton
           size="sm"
-          color="neutral"
-          variant="soft"
+          color="info"
+          variant="subtle"
           icon="i-heroicons-plus-small"
-          class="w-full"
           @click="createProject"
-        >
-          New Project
-        </UButton>
+        />
       </div>
+      <UNavigationMenu
+        orientation="vertical"
+        class="w-full"
+        :items="projects"
+        default-open
+      />
     </div>
 
     <div v-if="chats.length > 0" class="overflow-y-auto p-4">
@@ -54,13 +51,22 @@ const { chats } = useAppSidebarChats()
     </div>
 
     <div v-else class="overflow-y-auto p-4">
-      <UAlert
-        title="No Chats"
-        description="Create a new chat to get started."
-        color="neutral"
-        variant="soft"
-        class="mt-2"
-      />
+      <UAlert title="No Chats" color="neutral" variant="soft" class="mt-2">
+        <template #description>
+          <p>
+            <UButton
+              size="sm"
+              class="p-0"
+              color="info"
+              variant="link"
+              @click="createChat"
+            >
+              Create a new chat
+            </UButton>
+            to get started.
+          </p>
+        </template>
+      </UAlert>
     </div>
   </aside>
 </template>

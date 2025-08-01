@@ -8,9 +8,23 @@ export default function useProjects() {
 
   function createProject() {
     const id = (projects.value.length + 1).toString()
+
+    const existingNewProjects = projects.value.filter((project) =>
+      project.name.startsWith('New Project'),
+    )
+    const nextNewProjectIndex =
+      existingNewProjects.length > 0
+        ? Math.max(
+            ...existingNewProjects.map((p) => {
+              const match = p.name.match(/New Project (\d+)/)
+              return match ? parseInt(match[1]!) : 0
+            }),
+          ) + 1
+        : 1
+
     const project = {
       id,
-      name: 'New Project',
+      name: `New Project ${nextNewProjectIndex}`,
     }
 
     projects.value.push(project)

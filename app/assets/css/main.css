@@ -1,2 +1,63 @@
 @import 'tailwindcss' theme(static);
 @import '@nuxt/ui';
+
+@theme {
+  --font-sans: 'ArkPixel-12px', 'sans-serif';
+  --font-mono: 'ArkPixel-12px-mono', 'monospace';
+
+  --font-family-arkpixel-10: 'ArkPixel-10px', 'sans-serif';
+  --font-family-arkpixel-12: 'ArkPixel-12px', 'sans-serif';
+  --font-family-arkpixel-16: 'ArkPixel-16px', 'sans-serif';
+  --font-family-arkpixel-10-mono: 'ArkPixel-10px-mono', 'monospace';
+  --font-family-arkpixel-12-mono: 'ArkPixel-12px-mono', 'monospace';
+  --font-family-arkpixel-16-mono: 'ArkPixel-16px-mono', 'monospace';
+
+  --text-xs: 400 10px var(--font-family-arkpixel-10);
+  --text-sm: 400 12px var(--font-family-arkpixel-12);
+  --text-base: 400 12px var(--font-family-arkpixel-12);
+  --text-lg: 400 16px var(--font-family-arkpixel-16);
+  --text-xl: 400 16px var(--font-family-arkpixel-16);
+  --text-2xl: 400 16px var(--font-family-arkpixel-16);
+  --text-3xl: 400 16px var(--font-family-arkpixel-16);
+  --text-4xl: 400 16px var(--font-family-arkpixel-16);
+
+  --font-weight-semibold: 400;
+  --font-weight-bold: 400;
+
+  --color-green-50: #effdf5;
+  --color-green-100: #d9fbe8;
+  --color-green-200: #b3f5d1;
+  --color-green-300: #75edae;
+  --color-green-400: #00dc82;
+  --color-green-500: #00c16a; /* primary */
+  --color-green-600: #00a155;
+  --color-green-700: #007f45;
+  --color-green-800: #016538;
+  --color-green-900: #0a5331;
+  --color-green-950: #052e16;
+}
+
+:root {
+  --ui-primary: var(--color-green-500);
+  --ui-bg: var(--color-gray-950);
+  --ui-bg-muted: var(--color-gray-900);
+  --ui-bg-elevated: var(--color-gray-800);
+  --ui-bg-accented: var(--color-gray-700);
+  --ui-bg-inverted: var(--color-white);
+
+  --ui-text: var(--color-gray-100);
+  --ui-text-muted: var(--color-gray-200);
+  --ui-text-dimmed: var(--color-gray-400);
+  --ui-text-highlighted: var(--color-white);
+
+  --ui-border: var(--color-gray-800);
+  --ui-border-muted: var(--color-gray-800);
+  --ui-border-accented: var(--color-gray-700);
+  --ui-border-inverted: var(--color-white);
+
+  --ui-radius: var(--radius-md);
+  --ui-container: var(--container-6xl);
+
+  /* Custom button xl text size override */
+  --ui-button-text-xl: var(--text-xl);
+}

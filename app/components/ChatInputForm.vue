@@ -18,7 +18,7 @@ function onMessageSend() {
 
 <template>
   <form
-    class="relative flex items-center justify-center transition-all ease-in-out duration-150 border border-default rounded-4xl overflow-hidden py-4 pl-5 pr-8 bg-default focus-within:transform-none hover:transform-none hover:outline-none hover:shadow-md"
+    class="relative flex items-center justify-center transition-all ease-in-out duration-150 border border-default overflow-hidden py-4 pl-5 pr-8 bg-default focus-within:transform-none hover:transform-none hover:outline-none hover:shadow-md"
     @submit.prevent="onMessageSend"
   >
     <ChatTextarea
