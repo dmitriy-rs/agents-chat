@@ -27,7 +27,7 @@ export default function useChats() {
     navigateTo(`/projects/${projectId}/chats/${chat.id}`)
   }
 
-  function chatsInProject(projectId: string) {
+  function chatsInProject(projectId?: string) {
     return chats.value.filter((c) => c.projectId === projectId)
   }
 

@@ -4,6 +4,8 @@ import { MOCK_PROJECT } from './mockData'
 export default function useProjects() {
   const projects = useState<Project[]>('projects', () => [MOCK_PROJECT])
 
+  const { createProjectChat } = useChats()
+
   function createProject() {
     const id = (projects.value.length + 1).toString()
     const project = {
@@ -13,7 +15,7 @@ export default function useProjects() {
 
     projects.value.push(project)
 
-    return project
+    createProjectChat(id)
   }
 
   return { projects, createProject }

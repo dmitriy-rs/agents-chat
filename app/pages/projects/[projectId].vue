@@ -40,7 +40,8 @@ async function handleNewChat() {
           Back to Project
         </NuxtLink>
       </div>
-      <UButton color="primary" icon="i-heroicons-plus" @click="handleNewChat">
+
+      <UButton color="primary" variant="soft" icon="i-heroicons-plus" @click="handleNewChat">
         New Chat in Project
       </UButton>
     </div>
