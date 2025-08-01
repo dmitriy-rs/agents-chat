@@ -23,7 +23,7 @@ const options: { label: string; value: GroupKey }[] = [
   { label: 'Cyber Pulse', value: 'cyberPulse' },
 ]
 
-const selected = ref<GroupKey>('forestWhispers')
+const selected = useState<GroupKey>('music', () => 'forestWhispers')
 
 const { isPlaying, hasStarted, pauseMusic, startMusic, restartMusic } =
   useMusicOnMount([...musicGroups[selected.value]])
