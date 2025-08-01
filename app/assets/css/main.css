@@ -1,6 +1,10 @@
 @import 'tailwindcss' theme(static);
 @import '@nuxt/ui';
 
+@plugin 'tailwind-scrollbar' {
+  nocompatible: true;
+}
+
 @theme {
   --font-sans: 'ArkPixel-12px', 'sans-serif';
   --font-mono: 'ArkPixel-12px-mono', 'monospace';

@@ -46,6 +46,7 @@ function startStop() {
 
     <USelect
       v-model="selected"
+      class=""
       leading-icon="i-heroicons-musical-note"
       trailing-icon=""
       :items="options"
@@ -53,7 +54,11 @@ function startStop() {
       color="primary"
       variant="soft"
       :content="{ side: 'top', align: 'end', sideOffset: 6 }"
-      :ui="{ content: 'w-42' }"
+      :ui="{
+        content: 'w-42',
+        viewport:
+          'scrollbar scrollbar-thumb-neutral-800 scrollbar-track-neutral-950 scrollbar-thin scrollbar-thumb-rounded-none scrollbar-track-rounded-none',
+      }"
     />
   </div>
 </template>
