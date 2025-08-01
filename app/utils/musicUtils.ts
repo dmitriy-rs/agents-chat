@@ -276,6 +276,81 @@ const cyberPulseBass: MelodyConfig = {
   filter: { type: 'lowpass', frequency: 650 },
 }
 
+/* ─── Laser Lagoon ─────────────────────────────────────────────── */
+const laserLagoonLead: MelodyConfig = {
+  name: 'Laser Lagoon Lead',
+  notes: [
+    { note: 'G#4', duration: 480 },
+    { note: 'B4', duration: 480 },
+    { note: 'D#5', duration: 480 },
+    { note: 'G#5', duration: 640 },
+
+    { note: 'F#5', duration: 480 },
+    { note: 'D#5', duration: 480 },
+    { note: 'B4', duration: 480 },
+    { note: 'G#4', duration: 640 },
+  ],
+  tempo: 480,
+  volume: 0.16,
+  waveType: 'sawtooth', // glossy FM-ish chip lead
+  modulator: {
+    type: 'sine',
+    frequency: 5, // mild vibrato
+    depth: 20,
+    param: 'detune',
+  },
+  filter: { type: 'lowpass', frequency: 1900 },
+}
+
+const laserLagoonBass: MelodyConfig = {
+  name: 'Laser Lagoon Bass',
+  notes: [
+    { note: 'G#2', duration: 960 },
+    { note: 'G#2', duration: 960 },
+    { note: 'B1', duration: 960 },
+    { note: 'D#2', duration: 960 },
+  ],
+  tempo: 960, // half-time pulse vs. lead
+  volume: 0.1,
+  waveType: 'triangle',
+  filter: { type: 'lowpass', frequency: 600 },
+}
+
+/* ─── Starfall Serenade ────────────────────────────────────────── */
+const starfallSerenadeLead: MelodyConfig = {
+  name: 'Starfall Serenade Lead',
+  notes: [
+    { note: 'C5', duration: 650 },
+    { note: 'A4', duration: 650 },
+    { note: 'F4', duration: 650 },
+    { note: 'C4', duration: 850 },
+
+    { note: 'D4', duration: 650 },
+    { note: 'F4', duration: 650 },
+    { note: 'A4', duration: 650 },
+    { note: 'C5', duration: 850 },
+  ],
+  tempo: 650,
+  volume: 0.14,
+  waveType: 'triangle', // mellow, almost flute-like
+  modulator: { type: 'sine', frequency: 3, depth: 15, param: 'frequency' },
+  filter: { type: 'highpass', frequency: 900 }, // airy shimmer
+}
+
+const starfallSerenadeBass: MelodyConfig = {
+  name: 'Starfall Serenade Bass',
+  notes: [
+    { note: 'C3', duration: 1300 },
+    { note: 'C3', duration: 1300 },
+    { note: 'F2', duration: 1300 },
+    { note: 'A1', duration: 1300 },
+  ],
+  tempo: 1300,
+  volume: 0.09,
+  waveType: 'sine', // round sub-bass
+  filter: { type: 'lowpass', frequency: 500 },
+}
+
 export const melodies = {
   eightBitAdventureLead,
   eightBitAdventureBass,
@@ -291,4 +366,20 @@ export const melodies = {
   forestWhispersBass,
   cyberPulseLead,
   cyberPulseBass,
+  laserLagoonLead,
+  laserLagoonBass,
+  starfallSerenadeLead,
+  starfallSerenadeBass,
+} as const
+
+export const musicGroups = {
+  adventure: [melodies.eightBitAdventureLead, melodies.eightBitAdventureBass],
+  chipQuest: [melodies.chipQuestLead, melodies.chipQuestBass],
+  retroVoyage: [melodies.retroVoyageLead, melodies.retroVoyageBass],
+  pixelDream: [melodies.pixelDreamLead, melodies.pixelDreamBass],
+  spaceOdyssey: [melodies.spaceOdysseyLead, melodies.spaceOdysseyBass],
+  forestWhispers: [melodies.forestWhispersLead, melodies.forestWhispersBass],
+  cyberPulse: [melodies.cyberPulseLead, melodies.cyberPulseBass],
+  laserLagoon: [melodies.laserLagoonLead, melodies.laserLagoonBass],
+  starfallSerenade: [starfallSerenadeLead, starfallSerenadeBass],
 } as const

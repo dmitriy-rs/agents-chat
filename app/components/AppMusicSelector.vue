@@ -1,16 +1,4 @@
 <script setup lang="ts">
-import { melodies } from '~/utils/musicUtils'
-
-const musicGroups = {
-  adventure: [melodies.eightBitAdventureLead, melodies.eightBitAdventureBass],
-  chipQuest: [melodies.chipQuestLead, melodies.chipQuestBass],
-  retroVoyage: [melodies.retroVoyageLead, melodies.retroVoyageBass],
-  pixelDream: [melodies.pixelDreamLead, melodies.pixelDreamBass],
-  spaceOdyssey: [melodies.spaceOdysseyLead, melodies.spaceOdysseyBass],
-  forestWhispers: [melodies.forestWhispersLead, melodies.forestWhispersBass],
-  cyberPulse: [melodies.cyberPulseLead, melodies.cyberPulseBass],
-} as const
-
 type GroupKey = keyof typeof musicGroups
 
 const options: { label: string; value: GroupKey }[] = [
@@ -21,9 +9,11 @@ const options: { label: string; value: GroupKey }[] = [
   { label: 'Space Odyssey', value: 'spaceOdyssey' },
   { label: 'Forest Whispers', value: 'forestWhispers' },
   { label: 'Cyber Pulse', value: 'cyberPulse' },
+  { label: 'Starfall Serenade', value: 'starfallSerenade' },
+  { label: 'Laser Lagoon', value: 'laserLagoon' },
 ]
 
-const selected = useState<GroupKey>('music', () => 'forestWhispers')
+const selected = useState<GroupKey>('music', () => 'laserLagoon')
 
 const { isPlaying, hasStarted, pauseMusic, startMusic, restartMusic } =
   useMusicOnMount([...musicGroups[selected.value]])
@@ -56,7 +46,6 @@ function startStop() {
 
     <USelect
       v-model="selected"
-      class="[&_.ui-select-label]:hidden"
       leading-icon="i-heroicons-musical-note"
       trailing-icon=""
       :items="options"
@@ -64,7 +53,7 @@ function startStop() {
       color="primary"
       variant="soft"
       :content="{ side: 'top', align: 'end', sideOffset: 6 }"
-      :ui="{ content: 'w-42', viewport: 'max-h-none overflow-visible' }"
+      :ui="{ content: 'w-42' }"
     />
   </div>
 </template>
