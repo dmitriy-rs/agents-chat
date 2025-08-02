@@ -1,5 +1,5 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
-import type { Chat } from '~~/layers/chat/shared/types/types'
+import type { Chat } from '~~/layers/chat/shared/types/chat'
 
 export default function useAppSidebarChats() {
   const route = useRoute()

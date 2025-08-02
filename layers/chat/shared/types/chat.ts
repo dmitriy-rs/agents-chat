@@ -1,14 +1,12 @@
 import type { UIMessage } from 'ai'
 
 export type ChatMessage = UIMessage<{
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
 }>
 
 export interface Chat {
   id: string
   title: string
-  messages: ChatMessage[]
   projectId?: string
   createdAt: Date
   updatedAt: Date
@@ -23,4 +21,5 @@ export interface Project {
 
 export interface ChatWithProject extends Chat {
   project: Project | null
+  latestMessage: ChatMessage | null
 }

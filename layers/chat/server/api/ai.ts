@@ -1,6 +1,6 @@
 import type { UIMessage } from 'ai'
-import { generateChatResponse } from './services/ai/llm'
-import { createOpenAIModel } from './services/ai/model'
+import { generateChatResponse } from '../services/ai/llm'
+import { createOpenAIModel } from '../services/ai/model'
 
 export default defineLazyEventHandler(async () => {
   const apiKey = useRuntimeConfig().openaiApiKey

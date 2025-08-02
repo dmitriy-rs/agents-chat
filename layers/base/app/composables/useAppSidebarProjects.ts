@@ -1,5 +1,5 @@
 import type { NavigationMenuItem } from '@nuxt/ui'
-import type { Chat, Project } from '~~/layers/chat/shared/types/types'
+import type { Chat, Project } from '~~/layers/chat/shared/types/chat'
 
 export default function useAppSidebarProjects() {
   const route = useRoute()

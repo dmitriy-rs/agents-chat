@@ -1,5 +1,3 @@
-import type { Chat } from '~~/layers/chat/shared/types/types'
-
 export function useChatPageHead(chat: MaybeRefOrGetter<Chat | undefined>) {
   const appConfig = useAppConfig()
   const title = computed(() => {
