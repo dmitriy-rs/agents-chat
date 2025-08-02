@@ -1,22 +1,15 @@
 <script setup lang="ts">
-import type { UIMessage } from 'ai'
-const props = defineProps<{
+const { id, initialMessages } = defineProps<{
   id: string
-  title: string
-  messages: UIMessage[]
-  isPending: boolean
-}>()
-const emit = defineEmits<{
-  (e: 'send-message', message: string): void
+  initialMessages: ChatMessage[]
 }>()
 
-const isEmpty = computed(() => props.messages.length === 0)
+const { chat, isPending, sendMessage } = useChat(id, initialMessages)
 
-function sendMessage(message: string) {
-  emit('send-message', message)
-}
+const isEmpty = computed(() => chat.messages.length === 0)
+const messages = computed(() => chat.messages)
 
-const { shouldShowScrollButton, scrollToBottom } = useChatScroll(props.messages)
+const { shouldShowScrollButton, scrollToBottom } = useChatScroll(messages)
 </script>
 
 <template>
@@ -30,7 +23,7 @@ const { shouldShowScrollButton, scrollToBottom } = useChatScroll(props.messages)
       </ChatEmptyState>
 
       <div v-else class="py-4">
-        <ChatMessages :messages :is-pending />
+        <ChatMessages :messages="chat.messages" :is-pending />
 
         <div class="fixed bottom-6 max-w-4xl w-[calc(100%-3rem)] z-10">
           <ChatScrollButton

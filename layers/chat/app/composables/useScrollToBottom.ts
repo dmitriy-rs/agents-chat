@@ -35,12 +35,14 @@ export default function useScrollToBottom(
   async function pinToBottom() {
     console.log(isAtBottom.value)
     if (isAtBottom.value && container.value) {
+      measure()
+      await nextTick()
       scrollToBottom(true)
     }
-    measure()
   }
 
-  onMounted(() => {
+  onMounted(async () => {
+    await nextTick()
     scrollToBottom(true)
     measure()
   })

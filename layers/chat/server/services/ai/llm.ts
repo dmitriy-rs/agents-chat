@@ -53,3 +53,6 @@ export async function streamChatResponse({
     },
   })
 }
+
+
+// export async function generateChatTitle(model: LanguageModelV2,) {}

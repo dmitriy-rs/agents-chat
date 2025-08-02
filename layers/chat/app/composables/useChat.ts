@@ -1,14 +1,12 @@
 import { DefaultChatTransport } from 'ai'
 import { Chat as AIChat } from '@ai-sdk/vue'
 
+
 export default function useChat(
   chatId: string,
   initialMessages: ChatMessage[],
 ) {
-  const { chats } = useChats()
-  const chat = computed(() => chats.value.find((c) => c.id === chatId))
-
-  const aiChat = new AIChat<ChatMessage>({
+  const chat = new AIChat<ChatMessage>({
     id: chatId,
     messages: initialMessages,
     generateId: uuid,
@@ -27,19 +25,18 @@ export default function useChat(
   })
 
   async function sendMessage(message: string) {
-    aiChat.sendMessage({
+    chat.sendMessage({
       role: 'user' as const,
       parts: [{ type: 'text', text: message }],
     })
   }
 
-  const isPending = computed(() => aiChat.status === 'streaming')
-  const messages = computed(() => aiChat.messages)
+  const isPending = computed(() => chat.status === 'streaming')
 
   return {
     chat,
-    messages,
     isPending,
+
     sendMessage,
   }
 }

@@ -1,7 +1,13 @@
 import { createChat } from '../../repository/chatRepository'
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  const { title, projectId } = await readBody<{
+    title: string
+    projectId?: string
+  }>(event)
+
   return createChat({
-    title: 'Untitled chat',
+    title,
+    projectId,
   })
 })
