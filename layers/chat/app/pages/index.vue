@@ -9,9 +9,9 @@ const { createChat } = useChats()
 <template>
   <div class="relative h-full">
     <UContainer class="flex flex-col items-center justify-center h-full">
-      <UButton size="xl" @click="createChat">
+      <USoundButton sound="floppySave" size="xl" @click="createChat">
         Start a new chat journey
-      </UButton>
+      </USoundButton>
     </UContainer>
   </div>
 </template>

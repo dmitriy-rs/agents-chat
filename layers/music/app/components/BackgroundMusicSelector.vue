@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { BackgroundMelody } from '../utils/musicUtils'
-
 const options: { label: string; value: BackgroundMelody }[] = [
   { label: 'Adventure', value: 'adventure' },
   { label: 'Chiptune Quest', value: 'chipQuest' },

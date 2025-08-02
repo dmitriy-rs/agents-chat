@@ -1,5 +1,3 @@
-import type { BackgroundMelody } from '~~/layers/music/app/utils/musicUtils'
-
 export default function useBackgroundMusic() {
   const selected = useState<BackgroundMelody>('music', () => 'laserLagoon')
 

@@ -1,53 +1,36 @@
-import { ref, onUnmounted } from 'vue'
-import type { Melody } from '~~/layers/music/app/utils/musicUtils'
-
-class MelodyLoop {
+class LoopPlayer {
+  private engine: NoteEngine
   private noteIdx = 0
   private timerId?: number
+  private stopped = false
 
   constructor(
     private ctx: AudioContext,
     private destination: GainNode,
     private cfg: Melody,
-    private Sound: typeof import('retro-sound').Sound,
-  ) {}
+    Sound: typeof import('retro-sound').Sound,
+  ) {
+    this.engine = new NoteEngine(ctx, destination, cfg, Sound)
+  }
 
-  private playNext = () => {
-    if (this.ctx.state === 'suspended') this.ctx.resume()
-
+  private playCurrent = () => {
+    if (this.stopped) return
     const current = this.cfg.notes[this.noteIdx]
     if (!current) return
 
-    let synth = new this.Sound(this.ctx, this.cfg.waveType)
-
-    if (this.cfg.modulator) {
-      const { type, frequency, depth, param } = this.cfg.modulator
-      synth = synth.withModulator(type, frequency, depth, param)
-    }
-    if (this.cfg.filter) {
-      const { type, frequency } = this.cfg.filter
-      synth = synth.withFilter(type, frequency)
-    }
-
-    synth
-      .toDestination(this.destination)
-      .play(current.note)
-      .rampToVolumeAtTime(0, current.duration / 1000)
-      .waitDispose()
-
+    this.engine.play(current)
     this.noteIdx = (this.noteIdx + 1) % this.cfg.notes.length
   }
 
   start() {
-    this.playNext()
-    this.timerId = window.setInterval(this.playNext, this.cfg.tempo)
+    if (this.stopped) return
+    this.playCurrent()
+    this.timerId = window.setInterval(this.playCurrent, this.cfg.tempo)
   }
 
   stop() {
-    if (this.timerId != null) {
-      clearInterval(this.timerId)
-      this.timerId = undefined
-    }
+    this.stopped = true
+    if (this.timerId != null) clearInterval(this.timerId)
   }
 }
 
@@ -56,7 +39,7 @@ export default function useBackgroundMusicPlayer() {
   const isPlaying = ref(false)
   const currentConfigs = ref<readonly Melody[]>([])
 
-  const loops: MelodyLoop[] = []
+  const loops: LoopPlayer[] = []
   const engine = useAudioEngine()
 
   const startMusic = async (melodies: readonly Melody[]) => {
@@ -72,12 +55,13 @@ export default function useBackgroundMusicPlayer() {
 
     currentConfigs.value = melodies
 
+    // only for restarts
     const now = engine.context.value.currentTime
     engine.master.value.gain.cancelScheduledValues(now)
     engine.master.value.gain.setValueAtTime(0.15, now)
 
     melodies.forEach((cfg) => {
-      const loop = new MelodyLoop(
+      const loop = new LoopPlayer(
         engine.context.value!,
         engine.master.value!,
         cfg,
