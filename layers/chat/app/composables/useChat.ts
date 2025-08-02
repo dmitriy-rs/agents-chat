@@ -1,51 +1,40 @@
-import type { UIMessage } from 'ai'
+import { DefaultChatTransport } from 'ai'
+import { Chat as AIChat } from '@ai-sdk/vue'
 
-export default function useChat(chatId: string) {
+export default function useChat(
+  chatId: string,
+  initialMessages: ChatMessage[],
+) {
   const { chats } = useChats()
   const chat = computed(() => chats.value.find((c) => c.id === chatId))
 
-  const messages = computed(() => chat.value?.messages ?? [])
-
-  const isPending = ref(false)
-
-  function createMessage(
-    message: string,
-    role: UIMessage['role'],
-  ): ChatMessage {
-    const id = messages.value.length.toString()
-
-    return {
-      id,
-      role,
-      parts: [
-        {
-          type: 'text',
-          text: message,
-        },
-      ],
-      metadata: {
-        createdAt: new Date(),
-        updatedAt: new Date(),
+  const aiChat = new AIChat<ChatMessage>({
+    id: chatId,
+    messages: initialMessages,
+    generateId: uuid,
+    transport: new DefaultChatTransport({
+      api: `/api/chats/${chatId}/messages`,
+      prepareSendMessagesRequest({ messages, id, body }) {
+        return {
+          body: {
+            id,
+            message: messages.at(-1),
+            ...body,
+          },
+        }
       },
-    }
-  }
+    }),
+  })
 
   async function sendMessage(message: string) {
-    if (!chat.value) return
-    isPending.value = true
-    messages.value.push(createMessage(message, 'user'))
-
-    const data = await $fetch<ChatMessage>('/api/ai', {
-      method: 'POST',
-      body: {
-        messages: messages.value,
-      },
+    aiChat.sendMessage({
+      role: 'user' as const,
+      parts: [{ type: 'text', text: message }],
     })
-
-    chat.value.updatedAt = new Date()
-    messages.value.push(data)
-    isPending.value = false
   }
+
+  const isPending = computed(() => aiChat.status === 'streaming')
+  const messages = computed(() => aiChat.messages)
 
   return {
     chat,

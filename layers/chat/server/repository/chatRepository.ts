@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
 import type {
   Chat,
   ChatWithProject,
@@ -12,6 +11,7 @@ import {
   getLastMessageByChatId,
 } from './messagesRepository'
 import { convertToUIMessage } from '../db/utils'
+import { uuid } from '../../shared/utils/utils'
 
 const chats: Chat[] = [MOCK_CHAT]
 
@@ -33,7 +33,7 @@ export async function createChat(data: {
 }): Promise<ChatWithProject | null> {
   const now = new Date()
   const newChat: Chat = {
-    id: uuidv4(),
+    id: uuid(),
     title: data.title || 'New Chat',
     projectId: data.projectId,
     createdAt: now,
@@ -93,14 +93,16 @@ export async function deleteChat(id: string): Promise<boolean> {
   return false
 }
 
-export async function createMessageForChat(data: {
-  parts: ChatMessage['parts']
-  role: 'user' | 'assistant'
-  chatId: string
-}): Promise<ChatMessage | null> {
-  const chat = chats.find((c) => c.id === data.chatId)
+export async function createMessageForChat(
+  chatId: string,
+  data: {
+    parts: ChatMessage['parts']
+    role: 'user' | 'assistant'
+  },
+): Promise<ChatMessage | null> {
+  const chat = chats.find((c) => c.id === chatId)
   if (!chat) return null
-  const message = await createMessageByChatId(data)
+  const message = await createMessageByChatId(chatId, data)
   chat.updatedAt = new Date()
   return message && convertToUIMessage(message)
 }

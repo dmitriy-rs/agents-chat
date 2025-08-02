@@ -4,9 +4,7 @@ import { createOpenAIModel } from '../services/ai/model'
 import { formatISO } from 'date-fns/fp'
 
 export default defineLazyEventHandler(async () => {
-  const apiKey = useRuntimeConfig().openaiApiKey
-  if (!apiKey) throw new Error('Missing OpenAI API key')
-  const openai = createOpenAIModel(apiKey)
+  const openai = createOpenAIModel()
 
   return defineEventHandler(async (event) => {
     const body = await readBody<{ messages: UIMessage[] }>(event)

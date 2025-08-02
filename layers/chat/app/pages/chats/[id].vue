@@ -3,8 +3,14 @@ definePageMeta({
   layout: false,
 })
 const route = useRoute()
+const chatId = route.params.id as string
+
+const { data } = await useFetch(`/api/chats/${chatId}/messages`)
+const initialMessages = toValue(data)
+
 const { chat, messages, sendMessage, isPending } = useChat(
-  route.params.id as string,
+  chatId,
+  initialMessages ?? [],
 )
 
 if (!chat.value) {
@@ -21,7 +27,7 @@ useChatPageHead(chat)
     <ChatWindow
       :id="chat.id"
       :title="chat.title"
-      :messages
+      :messages="messages"
       :is-pending
       @send-message="sendMessage"
     />

@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from 'uuid'
 import type { Project } from '../../shared/types/chat'
 import { MOCK_PROJECT } from '../../shared/utils/mockData'
+import { uuid } from '../../shared/utils/utils'
 
 const projects: Project[] = [MOCK_PROJECT]
 
@@ -15,7 +15,7 @@ export function getProjectById(id: string): Project | null {
 export async function createProject(data: { name: string }): Promise<Project> {
   const now = new Date()
   const newProject: Project = {
-    id: uuidv4(),
+    id: uuid(),
     name: data.name,
     createdAt: now,
     updatedAt: now,

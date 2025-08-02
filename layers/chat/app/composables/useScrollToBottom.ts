@@ -6,7 +6,7 @@ export default function useScrollToBottom(
   const smooth = ref(true)
   const behavior = computed(() => (smooth.value ? 'smooth' : 'auto'))
 
-  const { arrivedState, y } = useScroll(container, {
+  const { arrivedState, y, measure } = useScroll(container, {
     behavior,
     observe: true,
   })
@@ -33,18 +33,16 @@ export default function useScrollToBottom(
   }
 
   async function pinToBottom() {
+    console.log(isAtBottom.value)
     if (isAtBottom.value && container.value) {
-      // TODO: MardownRenderer is a shit
-      setTimeout(() => {
-        scrollToBottom(true)
-      }, 50)
+      scrollToBottom(true)
     }
+    measure()
   }
 
   onMounted(() => {
-    nextTick(() => {
-      scrollToBottom(true)
-    })
+    scrollToBottom(true)
+    measure()
   })
 
   return {

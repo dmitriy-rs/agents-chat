@@ -1,16 +1,16 @@
-import { v4 as uuidv4 } from 'uuid'
 import type { DBMessage } from '../../server/db/schema'
 import type { Chat, Project } from '../types/chat'
+import { uuid } from './utils'
 
 export const MOCK_PROJECT: Project = {
-  id: uuidv4(),
+  id: uuid(),
   name: 'Nuxt Project',
   createdAt: new Date(),
   updatedAt: new Date(),
 }
 
 export const MOCK_CHAT: Chat = {
-  id: uuidv4(),
+  id: '1',
   title: 'Nuxt.js project help',
   projectId: MOCK_PROJECT.id,
   createdAt: new Date(),
@@ -20,7 +20,7 @@ export const MOCK_CHAT: Chat = {
 export const MOCK_MESSAGES: DBMessage[] = [
   {
     chatId: MOCK_CHAT.id,
-    id: uuidv4(),
+    id: uuid(),
     parts: [
       {
         type: 'text',
@@ -32,7 +32,7 @@ export const MOCK_MESSAGES: DBMessage[] = [
   },
   {
     chatId: MOCK_CHAT.id,
-    id: uuidv4(),
+    id: uuid(),
     parts: [
       {
         type: 'text',
@@ -44,7 +44,7 @@ export const MOCK_MESSAGES: DBMessage[] = [
   },
   {
     chatId: MOCK_CHAT.id,
-    id: uuidv4(),
+    id: uuid(),
     parts: [
       {
         type: 'text',
@@ -56,7 +56,7 @@ export const MOCK_MESSAGES: DBMessage[] = [
   },
   {
     chatId: MOCK_CHAT.id,
-    id: uuidv4(),
+    id: uuid(),
     parts: [
       {
         type: 'text',

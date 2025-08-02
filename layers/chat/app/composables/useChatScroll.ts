@@ -7,7 +7,12 @@ export default function useChatScroll(messages: UIMessage[]) {
 
   const shouldShowScrollButton = computed(() => !isAtBottom.value)
 
-  watchDeep(() => messages, pinToBottom)
+  // TODO: Doesn't wokr
+  watchDeep(messages, (m) => {
+    console.log(m)
+
+    pinToBottom()
+  })
 
   return {
     shouldShowScrollButton,

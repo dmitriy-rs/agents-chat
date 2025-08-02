@@ -7,7 +7,7 @@ const messages: DBMessage[] = MOCK_MESSAGES
 
 export function getLastMessageByChatId(chatId: string): DBMessage | null {
   const chatMessages = messages.filter(
-    (m) => m.id === chatId && m.role === 'user',
+    (m) => m.chatId === chatId && m.role === 'user',
   )
   if (!chatMessages || chatMessages.length === 0) return null
   return chatMessages.reduce((latest, msg) =>
@@ -24,21 +24,20 @@ export function deleteMessagesByChatId(chatId: string): void {
 }
 
 export function getMessagesByChatId(chatId: string): DBMessage[] {
-  const chatMessages = messages.filter((m) => m.id === chatId)
-  return (chatMessages ?? []).sort(
-    (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-  )
+  const chatMessages = messages.filter((m) => m.chatId === chatId)
+  return chatMessages ?? []
 }
 
-export async function createMessageByChatId({
-  chatId,
-  parts,
-  role,
-}: {
-  parts: ChatMessage['parts']
-  role: 'user' | 'assistant'
-  chatId: string
-}): Promise<DBMessage | null> {
+export async function createMessageByChatId(
+  chatId: string,
+  {
+    parts,
+    role,
+  }: {
+    parts: ChatMessage['parts']
+    role: ChatMessage['role']
+  },
+): Promise<DBMessage | null> {
   const newMessage: DBMessage = {
     id: uuidv4(),
     chatId,
@@ -48,4 +47,14 @@ export async function createMessageByChatId({
   }
   messages.push(newMessage)
   return newMessage
+}
+
+export async function createMessagesByChatId(
+  chatId: string,
+  messages: {
+    parts: ChatMessage['parts']
+    role: ChatMessage['role']
+  }[],
+): Promise<Array<DBMessage | null>> {
+  return Promise.all(messages.map((m) => createMessageByChatId(chatId, m)))
 }
