@@ -15,7 +15,7 @@ useHead({
     </AppContent>
 
     <div class="fixed bottom-4 right-4">
-      <AppMusicSelector />
+      <BackgroundMusicSelector />
     </div>
   </div>
 </template>

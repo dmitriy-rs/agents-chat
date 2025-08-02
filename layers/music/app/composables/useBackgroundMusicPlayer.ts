@@ -1,39 +1,5 @@
 import { ref, onUnmounted } from 'vue'
-import type { MelodyConfig } from '~/utils/musicUtils'
-
-function useAudioEngine() {
-  const context = ref<AudioContext | null>(null)
-  const master = ref<GainNode | null>(null)
-  const SoundCtor = ref<typeof import('retro-sound').Sound | null>(null)
-  const initialized = ref(false)
-
-  const init = async () => {
-    if (initialized.value || typeof window === 'undefined') return
-
-    const { Sound } = await import('retro-sound')
-
-    const ctx = new AudioContext()
-    const masterGain = ctx.createGain()
-    masterGain.gain.setValueAtTime(0.15, ctx.currentTime)
-    masterGain.connect(ctx.destination)
-
-    context.value = ctx
-    master.value = masterGain
-    SoundCtor.value = Sound
-    initialized.value = true
-  }
-
-  const close = async () => {
-    if (!context.value) return
-    await context.value.close()
-    context.value = null
-    master.value = null
-    SoundCtor.value = null
-    initialized.value = false
-  }
-
-  return { context, master, SoundCtor, init, close } as const
-}
+import type { Melody } from '~~/layers/music/app/utils/musicUtils'
 
 class MelodyLoop {
   private noteIdx = 0
@@ -42,7 +8,7 @@ class MelodyLoop {
   constructor(
     private ctx: AudioContext,
     private destination: GainNode,
-    private cfg: MelodyConfig,
+    private cfg: Melody,
     private Sound: typeof import('retro-sound').Sound,
   ) {}
 
@@ -85,14 +51,15 @@ class MelodyLoop {
   }
 }
 
-export default function useMusicPlayer() {
+export default function useBackgroundMusicPlayer() {
+  const hasStarted = ref(false)
   const isPlaying = ref(false)
-  const currentConfigs = ref<readonly MelodyConfig[]>([])
+  const currentConfigs = ref<readonly Melody[]>([])
 
   const loops: MelodyLoop[] = []
   const engine = useAudioEngine()
 
-  const startMusic = async (melodies: readonly MelodyConfig[]) => {
+  const startMusic = async (melodies: readonly Melody[]) => {
     if (isPlaying.value) return
 
     await engine.init()
@@ -121,6 +88,7 @@ export default function useMusicPlayer() {
     })
 
     isPlaying.value = true
+    hasStarted.value = true
   }
 
   const pauseMusic = (fadeSeconds = 0.5) => {
@@ -150,5 +118,11 @@ export default function useMusicPlayer() {
     nextTick(engine.close)
   })
 
-  return { startMusic, pauseMusic, restartMusic, isPlaying } as const
+  return {
+    startMusic,
+    pauseMusic,
+    restartMusic,
+    isPlaying: readonly(isPlaying),
+    hasStarted: readonly(hasStarted),
+  }
 }

@@ -1,6 +1,8 @@
 @import 'tailwindcss' theme(static);
 @import '@nuxt/ui';
 
+@source '../../../../';
+
 @plugin 'tailwind-scrollbar' {
   nocompatible: true;
 }

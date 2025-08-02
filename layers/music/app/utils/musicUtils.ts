@@ -3,7 +3,7 @@ export interface MelodyNote {
   duration: number
 }
 
-export interface MelodyConfig {
+export interface Melody {
   name: string
   notes: readonly MelodyNote[]
   tempo: number
@@ -21,7 +21,7 @@ export interface MelodyConfig {
   }
 }
 
-const eightBitAdventureLead: MelodyConfig = {
+const eightBitAdventureLead: Melody = {
   name: '8-Bit Adventure Lead',
   notes: [
     { note: 'C4', duration: 500 },
@@ -49,7 +49,7 @@ const eightBitAdventureLead: MelodyConfig = {
   },
 }
 
-const eightBitAdventureBass: MelodyConfig = {
+const eightBitAdventureBass: Melody = {
   name: '8-Bit Adventure Bass',
   notes: [
     { note: 'C2', duration: 1000 },
@@ -71,7 +71,7 @@ const eightBitAdventureBass: MelodyConfig = {
   },
 }
 
-const chipQuestLead: MelodyConfig = {
+const chipQuestLead: Melody = {
   name: 'Chiptune Quest Lead',
   notes: [
     { note: 'E4', duration: 600 },
@@ -93,7 +93,7 @@ const chipQuestLead: MelodyConfig = {
   },
 }
 
-const chipQuestBass: MelodyConfig = {
+const chipQuestBass: Melody = {
   name: 'Chiptune Quest Bass',
   notes: [
     { note: 'E2', duration: 1200 },
@@ -110,7 +110,7 @@ const chipQuestBass: MelodyConfig = {
   },
 }
 
-const retroVoyageLead: MelodyConfig = {
+const retroVoyageLead: Melody = {
   name: 'Retro Voyage Lead',
   notes: [
     { note: 'A4', duration: 700 },
@@ -129,7 +129,7 @@ const retroVoyageLead: MelodyConfig = {
   filter: { type: 'lowpass', frequency: 1500 },
 }
 
-const retroVoyageBass: MelodyConfig = {
+const retroVoyageBass: Melody = {
   name: 'Retro Voyage Bass',
   notes: [
     { note: 'A2', duration: 1400 },
@@ -143,7 +143,7 @@ const retroVoyageBass: MelodyConfig = {
   filter: { type: 'lowpass', frequency: 650 },
 }
 
-const pixelDreamLead: MelodyConfig = {
+const pixelDreamLead: Melody = {
   name: 'Pixel Dream Lead',
   notes: [
     { note: 'D4', duration: 550 },
@@ -162,7 +162,7 @@ const pixelDreamLead: MelodyConfig = {
   filter: { type: 'lowpass', frequency: 1700 },
 }
 
-const pixelDreamBass: MelodyConfig = {
+const pixelDreamBass: Melody = {
   name: 'Pixel Dream Bass',
   notes: [
     { note: 'D2', duration: 1100 },
@@ -176,7 +176,7 @@ const pixelDreamBass: MelodyConfig = {
   filter: { type: 'lowpass', frequency: 600 },
 }
 
-const spaceOdysseyLead: MelodyConfig = {
+const spaceOdysseyLead: Melody = {
   name: 'Space Odyssey Lead',
   notes: [
     { note: 'E4', duration: 600 },
@@ -195,7 +195,7 @@ const spaceOdysseyLead: MelodyConfig = {
   filter: { type: 'lowpass', frequency: 1700 },
 }
 
-const spaceOdysseyBass: MelodyConfig = {
+const spaceOdysseyBass: Melody = {
   name: 'Space Odyssey Bass',
   notes: [
     { note: 'E2', duration: 1200 },
@@ -209,7 +209,7 @@ const spaceOdysseyBass: MelodyConfig = {
   filter: { type: 'lowpass', frequency: 600 },
 }
 
-const forestWhispersLead: MelodyConfig = {
+const forestWhispersLead: Melody = {
   name: 'Forest Whispers Lead',
   notes: [
     { note: 'C4', duration: 700 },
@@ -228,7 +228,7 @@ const forestWhispersLead: MelodyConfig = {
   filter: { type: 'lowpass', frequency: 1500 },
 }
 
-const forestWhispersBass: MelodyConfig = {
+const forestWhispersBass: Melody = {
   name: 'Forest Whispers Bass',
   notes: [
     { note: 'C2', duration: 1400 },
@@ -242,7 +242,7 @@ const forestWhispersBass: MelodyConfig = {
   filter: { type: 'lowpass', frequency: 500 },
 }
 
-const cyberPulseLead: MelodyConfig = {
+const cyberPulseLead: Melody = {
   name: 'Cyber Pulse Lead',
   notes: [
     { note: 'F#4', duration: 500 },
@@ -262,7 +262,7 @@ const cyberPulseLead: MelodyConfig = {
   filter: { type: 'highpass', frequency: 900 },
 }
 
-const cyberPulseBass: MelodyConfig = {
+const cyberPulseBass: Melody = {
   name: 'Cyber Pulse Bass',
   notes: [
     { note: 'F#2', duration: 1000 },
@@ -277,7 +277,7 @@ const cyberPulseBass: MelodyConfig = {
 }
 
 /* ─── Laser Lagoon ─────────────────────────────────────────────── */
-const laserLagoonLead: MelodyConfig = {
+const laserLagoonLead: Melody = {
   name: 'Laser Lagoon Lead',
   notes: [
     { note: 'G#4', duration: 480 },
@@ -302,7 +302,7 @@ const laserLagoonLead: MelodyConfig = {
   filter: { type: 'lowpass', frequency: 1900 },
 }
 
-const laserLagoonBass: MelodyConfig = {
+const laserLagoonBass: Melody = {
   name: 'Laser Lagoon Bass',
   notes: [
     { note: 'G#2', duration: 960 },
@@ -317,7 +317,7 @@ const laserLagoonBass: MelodyConfig = {
 }
 
 /* ─── Starfall Serenade ────────────────────────────────────────── */
-const starfallSerenadeLead: MelodyConfig = {
+const starfallSerenadeLead: Melody = {
   name: 'Starfall Serenade Lead',
   notes: [
     { note: 'C5', duration: 650 },
@@ -337,7 +337,7 @@ const starfallSerenadeLead: MelodyConfig = {
   filter: { type: 'highpass', frequency: 900 }, // airy shimmer
 }
 
-const starfallSerenadeBass: MelodyConfig = {
+const starfallSerenadeBass: Melody = {
   name: 'Starfall Serenade Bass',
   notes: [
     { note: 'C3', duration: 1300 },
@@ -351,35 +351,16 @@ const starfallSerenadeBass: MelodyConfig = {
   filter: { type: 'lowpass', frequency: 500 },
 }
 
-export const melodies = {
-  eightBitAdventureLead,
-  eightBitAdventureBass,
-  chipQuestLead,
-  chipQuestBass,
-  retroVoyageLead,
-  retroVoyageBass,
-  pixelDreamLead,
-  pixelDreamBass,
-  spaceOdysseyLead,
-  spaceOdysseyBass,
-  forestWhispersLead,
-  forestWhispersBass,
-  cyberPulseLead,
-  cyberPulseBass,
-  laserLagoonLead,
-  laserLagoonBass,
-  starfallSerenadeLead,
-  starfallSerenadeBass,
-} as const
-
-export const musicGroups = {
-  adventure: [melodies.eightBitAdventureLead, melodies.eightBitAdventureBass],
-  chipQuest: [melodies.chipQuestLead, melodies.chipQuestBass],
-  retroVoyage: [melodies.retroVoyageLead, melodies.retroVoyageBass],
-  pixelDream: [melodies.pixelDreamLead, melodies.pixelDreamBass],
-  spaceOdyssey: [melodies.spaceOdysseyLead, melodies.spaceOdysseyBass],
-  forestWhispers: [melodies.forestWhispersLead, melodies.forestWhispersBass],
-  cyberPulse: [melodies.cyberPulseLead, melodies.cyberPulseBass],
-  laserLagoon: [melodies.laserLagoonLead, melodies.laserLagoonBass],
+export const backgroundMelodies = {
+  adventure: [eightBitAdventureLead, eightBitAdventureBass],
+  chipQuest: [chipQuestLead, chipQuestBass],
+  retroVoyage: [retroVoyageLead, retroVoyageBass],
+  pixelDream: [pixelDreamLead, pixelDreamBass],
+  spaceOdyssey: [spaceOdysseyLead, spaceOdysseyBass],
+  forestWhispers: [forestWhispersLead,forestWhispersBass],
+  cyberPulse: [cyberPulseLead, cyberPulseBass],
+  laserLagoon: [laserLagoonLead,laserLagoonBass],
   starfallSerenade: [starfallSerenadeLead, starfallSerenadeBass],
 } as const
+
+export type BackgroundMelody = keyof typeof backgroundMelodies

@@ -1,4 +1,4 @@
-import type { Project } from '../types'
+import type { Project } from '../../../../app/types'
 import { MOCK_PROJECT } from './mockData'
 
 export default function useProjects() {

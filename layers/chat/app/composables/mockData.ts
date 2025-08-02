@@ -1,5 +1,5 @@
 import type { UIMessage } from 'ai'
-import type { Chat, Project } from '../types'
+import type { Chat, Project } from '../../../../app/types'
 
 // Mock data for initial messages
 const MOCK_MESSAGES: UIMessage[] = [

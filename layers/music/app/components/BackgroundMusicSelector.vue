@@ -1,7 +1,7 @@
 <script setup lang="ts">
-type GroupKey = keyof typeof musicGroups
+import type { BackgroundMelody } from '../utils/musicUtils'
 
-const options: { label: string; value: GroupKey }[] = [
+const options: { label: string; value: BackgroundMelody }[] = [
   { label: 'Adventure', value: 'adventure' },
   { label: 'Chiptune Quest', value: 'chipQuest' },
   { label: 'Retro Voyage', value: 'retroVoyage' },
@@ -13,25 +13,7 @@ const options: { label: string; value: GroupKey }[] = [
   { label: 'Laser Lagoon', value: 'laserLagoon' },
 ]
 
-const selected = useState<GroupKey>('music', () => 'laserLagoon')
-
-const { isPlaying, hasStarted, pauseMusic, startMusic, restartMusic } =
-  useMusicOnMount([...musicGroups[selected.value]])
-
-watch(selected, async () => {
-  const newMelodies = [...musicGroups[selected.value]]
-  pauseMusic()
-  await nextTick()
-  startMusic(newMelodies)
-})
-
-function startStop() {
-  if (isPlaying.value) {
-    pauseMusic()
-  } else {
-    restartMusic()
-  }
-}
+const { selected, toggleMusic, hasStarted, isPlaying } = useBackgroundMusic()
 </script>
 
 <template>
@@ -41,7 +23,7 @@ function startStop() {
       variant="ghost"
       color="neutral"
       :icon="hasStarted && isPlaying ? 'i-heroicons-pause' : 'i-heroicons-play'"
-      @click="startStop"
+      @click="toggleMusic"
     />
 
     <USelect
