@@ -9,7 +9,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint . && prettier . --check --log-level silent",
-    "lint:fix": "eslint . --fix && prettier ./app --write --log-level silent",
+    "lint:fix": "eslint . --fix && prettier ./app ./layers --write --log-level silent",
     "prepare": "husky"
   },
   "dependencies": {

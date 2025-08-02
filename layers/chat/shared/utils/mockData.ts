@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import type { DBMessage } from '../types/schema'
+import type { DBMessage } from '../../server/db/schema'
 import type { Chat, Project } from '../types/chat'
 
 export const MOCK_PROJECT: Project = {

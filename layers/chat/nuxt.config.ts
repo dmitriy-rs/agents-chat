@@ -4,6 +4,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   runtimeConfig: {
-    openaiApiKey: ''
+    openaiApiKey: '',
   },
 })

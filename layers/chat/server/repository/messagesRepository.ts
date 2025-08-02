@@ -1,5 +1,5 @@
 import { MOCK_MESSAGES } from '../../shared/utils/mockData'
-import type { DBMessage } from '../../shared/types/schema'
+import type { DBMessage } from '../db/schema'
 import { v4 as uuidv4 } from 'uuid'
 import type { ChatMessage } from '../../shared/types/chat'
 

@@ -23,7 +23,7 @@ export default function useProjects() {
       id,
       name: `New Project ${nextNewProjectIndex}`,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     }
 
     projects.value.push(project)

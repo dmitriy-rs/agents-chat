@@ -213,5 +213,5 @@ export const soundEffects = {
   floppySave,
   modalOpen,
   msgSend,
-  msgReceive
+  msgReceive,
 } as const

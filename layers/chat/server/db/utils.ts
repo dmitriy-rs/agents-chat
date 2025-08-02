@@ -1,5 +1,5 @@
 import type { ChatMessage } from '../../shared/types/chat'
-import type { DBMessage } from '../../shared/types/schema'
+import type { DBMessage } from './schema'
 import { formatISO } from 'date-fns'
 
 export function convertToUIMessages(messages: DBMessage[]): ChatMessage[] {

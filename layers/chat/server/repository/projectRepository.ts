@@ -5,18 +5,14 @@ import { MOCK_PROJECT } from '../../shared/utils/mockData'
 const projects: Project[] = [MOCK_PROJECT]
 
 export function getAllProjects(): Project[] {
-  return [...projects].sort((a, b) =>
-    a.name.localeCompare(b.name)
-  )
+  return [...projects].sort((a, b) => a.name.localeCompare(b.name))
 }
 
 export function getProjectById(id: string): Project | null {
   return projects.find((p) => p.id === id) || null
 }
 
-export async function createProject(data: {
-  name: string
-}): Promise<Project> {
+export async function createProject(data: { name: string }): Promise<Project> {
   const now = new Date()
   const newProject: Project = {
     id: uuidv4(),
@@ -30,11 +26,9 @@ export async function createProject(data: {
 
 export async function updateProject(
   id: string,
-  data: { name: string }
+  data: { name: string },
 ): Promise<Project | null> {
-  const projectIndex = projects.findIndex(
-    (p) => p.id === id
-  )
+  const projectIndex = projects.findIndex((p) => p.id === id)
   if (projectIndex === -1) return null
   const project = projects[projectIndex]
   if (!project) return null
@@ -48,12 +42,8 @@ export async function updateProject(
   return updatedProject
 }
 
-export async function deleteProject(
-  id: string
-): Promise<boolean> {
-  const index = projects.findIndex(
-    (project) => project.id === id
-  )
+export async function deleteProject(id: string): Promise<boolean> {
+  const index = projects.findIndex((project) => project.id === id)
   if (index !== -1) {
     projects.splice(index, 1)
     return true

@@ -1,6 +1,7 @@
 import type { UIMessage } from 'ai'
 import { generateChatResponse } from '../services/ai/llm'
 import { createOpenAIModel } from '../services/ai/model'
+import { formatISO } from 'date-fns/fp'
 
 export default defineLazyEventHandler(async () => {
   const apiKey = useRuntimeConfig().openaiApiKey
@@ -26,8 +27,7 @@ export default defineLazyEventHandler(async () => {
         },
       ],
       metadata: {
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: formatISO(new Date()),
       },
     } satisfies ChatMessage
   })
