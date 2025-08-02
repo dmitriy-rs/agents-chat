@@ -54,5 +54,21 @@ export async function streamChatResponse({
   })
 }
 
+export async function generateChatTitle(
+  model: LanguageModelV2,
+  firstMessage: UIMessage,
+) {
+  const response = await generateText({
+    model,
+    messages: [
+      {
+        role: 'system',
+        content:
+          'Summarize the key points of the conversation in a concise way that would be helpful as context for future interactions. Make the message in 3 or less shirt words.',
+      },
+      ...convertToModelMessages([firstMessage]),
+    ],
+  })
 
-// export async function generateChatTitle(model: LanguageModelV2,) {}
+  return response.text
+}

@@ -1,7 +1,6 @@
 import { DefaultChatTransport } from 'ai'
 import { Chat as AIChat } from '@ai-sdk/vue'
 
-
 export default function useChat(
   chatId: string,
   initialMessages: ChatMessage[],
