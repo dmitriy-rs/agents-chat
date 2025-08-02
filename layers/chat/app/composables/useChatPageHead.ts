@@ -1,4 +1,4 @@
-import type { Chat } from '~/types'
+import type { Chat } from '~~/layers/chat/shared/types/types'
 
 export function useChatPageHead(chat: MaybeRefOrGetter<Chat | undefined>) {
   const appConfig = useAppConfig()

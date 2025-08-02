@@ -19,10 +19,16 @@ export default defineLazyEventHandler(async () => {
     return {
       id,
       role: 'assistant',
-      parts: [{
-        type: 'text',
-        text: response
-      }]
-    } satisfies UIMessage
+      parts: [
+        {
+          type: 'text',
+          text: response,
+        },
+      ],
+      metadata: {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    } satisfies ChatMessage
   })
 })

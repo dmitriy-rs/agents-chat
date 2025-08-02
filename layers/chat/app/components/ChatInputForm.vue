@@ -8,11 +8,14 @@ const emit = defineEmits<{
 
 const message = ref('')
 
+const { playSound } = useSoundEffect('macTrash')
+
 function onMessageSend() {
   if (!message.value || isPending) {
     return
   }
   emit('send-message', message.value)
+  playSound()
 }
 </script>
 

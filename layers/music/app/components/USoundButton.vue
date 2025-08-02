@@ -15,11 +15,11 @@ const { sound } = defineProps<SoundButtonProps>()
 defineSlots<ButtonSlots>()
 const emit = defineEmits(['click'])
 
-const { playSound } = useSoundPlayer(soundEffects[sound])
+const { playSound } = useSoundEffect(sound)
 
 function onClick() {
-  playSound()
   emit('click')
+  playSound()
 }
 </script>
 

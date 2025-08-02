@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Chat } from '~/types'
+import type { Chat } from '~~/layers/chat/shared/types/types'
 
 const route = useRoute()
 const projectId = route.params.projectId as string

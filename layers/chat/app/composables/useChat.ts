@@ -8,7 +8,10 @@ export default function useChat(chatId: string) {
 
   const isPending = ref(false)
 
-  function createMessage(message: string, role: UIMessage['role']): UIMessage {
+  function createMessage(
+    message: string,
+    role: UIMessage['role'],
+  ): ChatMessage {
     const id = messages.value.length.toString()
 
     return {
@@ -20,6 +23,10 @@ export default function useChat(chatId: string) {
           text: message,
         },
       ],
+      metadata: {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     }
   }
 
@@ -28,7 +35,7 @@ export default function useChat(chatId: string) {
     isPending.value = true
     messages.value.push(createMessage(message, 'user'))
 
-    const data = await $fetch<UIMessage>('/api/ai', {
+    const data = await $fetch<ChatMessage>('/api/ai', {
       method: 'POST',
       body: {
         messages: messages.value,
