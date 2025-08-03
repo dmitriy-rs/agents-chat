@@ -1,12 +1,17 @@
 export default function useChats() {
-  const chats = useState<Chat[]>('chats', () => [MOCK_CHAT])
+  const { data: chats } = useAsyncData(
+    'chats',
+    () => $fetch<ChatWithProject[]>('/api/chats'),
+    {
+      default: () => [],
+    },
+  )
 
   function createNewChat(projectId?: string) {
     const id = (chats.value.length + 1).toString()
     const chat: Chat = {
       id,
       title: `Chat ${id}`,
-      messages: [],
       projectId,
       createdAt: new Date(),
       updatedAt: new Date(),
