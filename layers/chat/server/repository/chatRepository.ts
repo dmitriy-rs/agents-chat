@@ -10,8 +10,8 @@ import {
   deleteMessagesByChatId,
   getLastMessageByChatId,
 } from './messagesRepository'
-import { convertToUIMessage } from '../db/utils'
 import { uuid } from '../../shared/utils/utils'
+import { mapToUIMessage } from '../db/mapper'
 
 const chats: Chat[] = [MOCK_CHAT]
 
@@ -95,19 +95,19 @@ export async function deleteChat(id: string): Promise<boolean> {
 
 export async function createMessageForChat(
   chatId: string,
-  data: {
-    parts: ChatMessage['parts']
-    role: 'user' | 'assistant'
-  },
-): Promise<ChatMessage | null> {
+  data: ChatMessage,
+): Promise<void> {
   const chat = chats.find((c) => c.id === chatId)
-  if (!chat) return null
-  const message = await createMessageByChatId(chatId, data)
+
+  if (!chat) {
+    return
+  }
+
+  await createMessageByChatId(chatId, data)
   chat.updatedAt = new Date()
-  return message && convertToUIMessage(message)
 }
 
 function getLatestUIMessage(chatId: string) {
   const lastMessage = getLastMessageByChatId(chatId)
-  return lastMessage && convertToUIMessage(lastMessage)
+  return lastMessage && mapToUIMessage(lastMessage)
 }

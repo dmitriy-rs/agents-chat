@@ -6,14 +6,17 @@ export default function useScrollToBottom(
   const smooth = ref(true)
   const behavior = computed(() => (smooth.value ? 'smooth' : 'auto'))
 
+  const delta = 3
   const { arrivedState, y, measure } = useScroll(container, {
     behavior,
     observe: true,
+    offset: { bottom: delta },
   })
 
   const isAtBottom = computed(() => {
     if (!container.value) return true
-    return arrivedState.bottom
+    const max = container.value.scrollHeight - container.value.clientHeight
+    return arrivedState.bottom || Math.abs(y.value - max) <= delta
   })
 
   const bottomTop = () =>
@@ -33,18 +36,21 @@ export default function useScrollToBottom(
   }
 
   async function pinToBottom() {
-    console.log(isAtBottom.value)
     if (isAtBottom.value && container.value) {
-      measure()
       await nextTick()
-      scrollToBottom(true)
+      setTimeout(() => {
+        measure()
+        scrollToBottom(true)
+      }, 30)
     }
   }
 
   onMounted(async () => {
     await nextTick()
-    scrollToBottom(true)
-    measure()
+    setTimeout(() => {
+      measure()
+      scrollToBottom(true)
+    })
   })
 
   return {

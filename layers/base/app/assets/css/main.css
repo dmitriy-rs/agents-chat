@@ -67,3 +67,8 @@
   /* Custom button xl text size override */
   --ui-button-text-xl: var(--text-2xl);
 }
+
+code,
+pre {
+  --font-sans: 'ArkPixel-12px-mono', 'monospace';
+}

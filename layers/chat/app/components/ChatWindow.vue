@@ -7,7 +7,11 @@ const { id, initialMessages } = defineProps<{
 const { chat, isPending, sendMessage } = useChat(id, initialMessages)
 
 const isEmpty = computed(() => chat.messages.length === 0)
-const messages = computed(() => chat.messages)
+const messages = computed(() => {
+  console.log(chat.messages)
+
+  return chat.messages
+})
 
 const { shouldShowScrollButton, scrollToBottom } = useChatScroll(messages)
 </script>

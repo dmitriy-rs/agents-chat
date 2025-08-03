@@ -1,12 +1,9 @@
-import { convertToUIMessages } from '../../../../db/utils'
-import {
-  getMessagesByChatId,
-  createMessagesByChatId,
-  createMessageByChatId,
-} from '../../../../repository/messagesRepository'
+import { getMessagesByChatId } from '../../../../repository/messagesRepository'
 import { createOpenAIModel } from '../../../../services/ai/model'
 import { streamChatResponse } from '../../../../services/ai/llm'
 import { JsonToSseTransformStream } from 'ai'
+import { createMessageForChat } from '../../../../repository/chatRepository'
+import { mapToUIMessage } from '../../../../db/mapper'
 
 export default defineLazyEventHandler(async () => {
   const openai = createOpenAIModel()
@@ -17,16 +14,16 @@ export default defineLazyEventHandler(async () => {
       message: ChatMessage
     }>(event)
 
-    const dbMessages = getMessagesByChatId(chatId)
-    const messages = [...convertToUIMessages(dbMessages), message]
+    await createMessageForChat(chatId, message)
 
-    await createMessageByChatId(chatId, message)
+    const dbMessages = getMessagesByChatId(chatId)
+    const messages = dbMessages.map(mapToUIMessage)
 
     const stream = await streamChatResponse({
       model: openai('gpt-4o-mini'),
       messages,
-      onFinish: async ({ messages }) => {
-        await createMessagesByChatId(chatId, messages)
+      onFinish: async ({ responseMessage }) => {
+        await createMessageForChat(chatId, responseMessage)
       },
     })
 

@@ -3,6 +3,7 @@ import type { LanguageModelV2 } from '@ai-sdk/provider'
 import {
   convertToModelMessages,
   createUIMessageStream,
+  generateId,
   generateText,
   stepCountIs,
   streamText,
@@ -27,11 +28,24 @@ export async function streamChatResponse({
   onFinish,
 }: {
   model: LanguageModelV2
-  messages: UIMessage[]
+  messages: ChatMessage[]
   onFinish: UIMessageStreamOnFinishCallback<ChatMessage>
 }) {
   return createUIMessageStream<ChatMessage>({
     execute: ({ writer }) => {
+      // if the last message is a user message, create our own start step so we can start streaming data
+      // if assistant message (e.g. adding tool result, we want to keep that as part of the previous step)
+      const lastMessage = messages.at(-1)!
+      if (lastMessage.role === 'user') {
+        writer.write({
+          type: 'start',
+          messageId: generateId(),
+        })
+        writer.write({
+          type: 'start-step',
+        })
+      }
+
       const result = streamText({
         model,
         messages: convertToModelMessages(messages),
@@ -42,14 +56,15 @@ export async function streamChatResponse({
 
       writer.merge(
         result.toUIMessageStream({
+          sendStart: false,
           sendReasoning: false,
         }),
       )
     },
-    generateId: uuid,
+    originalMessages: messages,
     onFinish,
-    onError: () => {
-      return 'Oops, an error occurred!'
+    onError: (error) => {
+      return error instanceof Error ? error.message : String(error)
     },
   })
 }

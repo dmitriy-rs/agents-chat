@@ -1,7 +1,7 @@
 import { MOCK_MESSAGES } from '../../shared/utils/mockData'
 import type { DBMessage } from '../db/schema'
-import { v4 as uuidv4 } from 'uuid'
 import type { ChatMessage } from '../../shared/types/chat'
+import { mapToDBMessage } from '../db/mapper'
 
 const messages: DBMessage[] = MOCK_MESSAGES
 
@@ -30,31 +30,9 @@ export function getMessagesByChatId(chatId: string): DBMessage[] {
 
 export async function createMessageByChatId(
   chatId: string,
-  {
-    parts,
-    role,
-  }: {
-    parts: ChatMessage['parts']
-    role: ChatMessage['role']
-  },
+  message: ChatMessage,
 ): Promise<DBMessage | null> {
-  const newMessage: DBMessage = {
-    id: uuidv4(),
-    chatId,
-    parts,
-    role,
-    createdAt: new Date(),
-  }
+  const newMessage = mapToDBMessage(chatId, message)
   messages.push(newMessage)
   return newMessage
-}
-
-export async function createMessagesByChatId(
-  chatId: string,
-  messages: {
-    parts: ChatMessage['parts']
-    role: ChatMessage['role']
-  }[],
-): Promise<Array<DBMessage | null>> {
-  return Promise.all(messages.map((m) => createMessageByChatId(chatId, m)))
 }

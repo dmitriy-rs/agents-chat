@@ -20,16 +20,19 @@
     "@vueuse/core": "^13.6.0",
     "ai": "5.0.0-beta.29",
     "date-fns": "^4.1.0",
+    "drizzle-orm": "^0.44.4",
     "eslint": "^9.32.0",
     "nuxt": "^4.0.1",
     "retro-sound": "^1.0.4",
     "vue": "^3.5.17",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "zod": "^4.0.14"
   },
   "devDependencies": {
     "@nuxtjs/mdc": "^0.17.2",
     "@prettier/plugin-oxc": "^0.0.4",
     "@vueuse/nuxt": "13.6.0",
+    "drizzle-kit": "^0.31.4",
     "husky": "^9.1.7",
     "prettier": "^3.6.2",
     "tailwind-scrollbar": "^4.0.2"

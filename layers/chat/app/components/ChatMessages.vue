@@ -24,8 +24,7 @@ defineProps<{
         class="break-words whitespace-pre-wrap"
       >
         <span v-if="part.type === 'text'">
-          <!-- <MarkdownRenderer :content="part.text" /> -->
-          {{ part.text }}
+          <MarkdownRenderer :content="part.text" />
         </span>
       </div>
     </div>

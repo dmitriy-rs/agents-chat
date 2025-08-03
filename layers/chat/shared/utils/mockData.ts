@@ -12,7 +12,7 @@ export const MOCK_PROJECT: Project = {
 export const MOCK_CHAT: Chat = {
   id: '1',
   title: 'Nuxt.js project help',
-  projectId: MOCK_PROJECT.id,
+  // projectId: MOCK_PROJECT.id,
   createdAt: new Date(),
   updatedAt: new Date(),
 }
@@ -20,11 +20,12 @@ export const MOCK_CHAT: Chat = {
 export const MOCK_MESSAGES: DBMessage[] = [
   {
     chatId: MOCK_CHAT.id,
-    id: uuid(),
+    id: '1',
     parts: [
       {
-        type: 'text',
-        text: 'Hello, can you help me with my Nuxt.js project?',
+        messageId: '1',
+        type: 'text' as const,
+        text_text: 'Hello, can you help me with my Nuxt.js project?',
       },
     ],
     role: 'user',
@@ -32,11 +33,13 @@ export const MOCK_MESSAGES: DBMessage[] = [
   },
   {
     chatId: MOCK_CHAT.id,
-    id: uuid(),
+    id: '2',
     parts: [
       {
+        messageId: '2',
         type: 'text',
-        text: "Of course! I'd be happy to help with your Nuxt.js project. What specific questions or issues do you have?",
+        text_text:
+          "Of course! I'd be happy to help with your Nuxt.js project. What specific questions or issues do you have?",
       },
     ],
     role: 'assistant',
@@ -44,11 +47,12 @@ export const MOCK_MESSAGES: DBMessage[] = [
   },
   {
     chatId: MOCK_CHAT.id,
-    id: uuid(),
+    id: '3',
     parts: [
       {
+        messageId: '3',
         type: 'text',
-        text: 'How do I implement server-side rendering?',
+        text_text: 'How do I implement server-side rendering?',
       },
     ],
     role: 'user',
@@ -56,11 +60,13 @@ export const MOCK_MESSAGES: DBMessage[] = [
   },
   {
     chatId: MOCK_CHAT.id,
-    id: uuid(),
+    id: '4',
     parts: [
       {
+        messageId: '4',
         type: 'text',
-        text: "Nuxt.js provides server-side rendering out of the box! You don't need to do any special configuration for basic SSR. If you need specific optimizations, we can discuss those in detail.",
+        text_text:
+          "Nuxt.js provides server-side rendering out of the box! You don't need to do any special configuration for basic SSR. If you need specific optimizations, we can discuss those in detail.",
       },
     ],
     role: 'assistant',

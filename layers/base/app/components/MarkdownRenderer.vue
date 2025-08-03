@@ -1,9 +1,21 @@
 <script setup lang="ts">
-defineProps<{ content: string }>()
+const { content } = defineProps<{ content: string }>()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ast = ref<any>({ body: [], data: {} })
+
+watchDebounced(
+  () => content,
+  async (md) => {
+    ast.value = await parseMarkdown(md)
+  },
+  { debounce: 20, maxWait: 250 },
+)
+
+ast.value = await parseMarkdown(content)
 </script>
 
 <template>
-  <MDC :value="content" class="markdown-content" />
+  <MDCRenderer :body="ast.body" :data="ast.data" class="markdown-content" />
 </template>
 
 <style>
