@@ -2,8 +2,13 @@
 import type { InferUITools, JSONValue, UIMessage, UIMessagePart } from 'ai'
 import { z } from 'zod'
 
+type Brand<T> = string & { __brand: T }
+
+export type ChatId = Brand<'ChatId'>
+export type ProjectId = Brand<'ProjectId'>
+
 export interface Chat {
-  id: string
+  id: ChatId
   title: string
   projectId?: string
   createdAt: Date
@@ -11,7 +16,7 @@ export interface Chat {
 }
 
 export interface Project {
-  id: string
+  id: ProjectId
   name: string
   createdAt: Date
   updatedAt: Date

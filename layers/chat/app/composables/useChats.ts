@@ -1,32 +1,33 @@
 export default function useChats() {
-  const { data: chats } = useAsyncData(
-    'chats',
-    () => $fetch<ChatWithProject[]>('/api/chats'),
-    {
-      default: () => [],
-    },
-  )
+  const { data: chats } = useFetch<ChatWithProject[]>('/api/chats', {
+    default: () => [],
+    key: 'chats',
+  })
 
-  function createNewChat(projectId?: string) {
-    const id = (chats.value.length + 1).toString()
-    const chat: Chat = {
-      id,
-      title: `Chat ${id}`,
-      projectId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
-    chats.value.push(chat)
+  async function createNewChat({
+    projectId,
+    title,
+  }: { projectId?: string; title?: string } = {}) {
+    const chat = await $fetch<Chat>('/api/chats', {
+      method: 'POST',
+      body: {
+        projectId,
+        title,
+      },
+      async onResponse() {
+        await refreshNuxtData('chats')
+      },
+    })
     return chat
   }
 
-  function createChat() {
-    const chat = createNewChat()
+  async function createChat() {
+    const chat = await createNewChat()
     navigateTo(`/chats/${chat.id}`)
   }
 
-  function createProjectChat(projectId: string) {
-    const chat = createNewChat(projectId)
+  async function createProjectChat(projectId: string) {
+    const chat = await createNewChat({ projectId })
     navigateTo(`/projects/${projectId}/chats/${chat.id}`)
   }
 

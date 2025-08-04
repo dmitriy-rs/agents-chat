@@ -1,10 +1,13 @@
 import { DefaultChatTransport } from 'ai'
 import { Chat as AIChat } from '@ai-sdk/vue'
+import { useGenerateChatTitle } from '#imports'
 
 export default function useChat(
-  chatId: string,
+  chatId: ChatId,
   initialMessages: ChatMessage[],
 ) {
+  const { generateChatTitle } = useGenerateChatTitle(chatId)
+
   const chat = new AIChat<ChatMessage>({
     id: chatId,
     messages: initialMessages,
@@ -23,11 +26,17 @@ export default function useChat(
     }),
   })
 
-  async function sendMessage(message: string) {
-    chat.sendMessage({
+  async function sendMessage(prompt: string) {
+    const message: Omit<ChatMessage, 'id'> = {
       role: 'user' as const,
-      parts: [{ type: 'text', text: message }],
-    })
+      parts: [{ type: 'text' as const, text: prompt }],
+    }
+
+    if (chat.messages.length === 0) {
+      generateChatTitle(message)
+    }
+
+    chat.sendMessage(message)
   }
 
   const isPending = computed(() => chat.status === 'streaming')

@@ -1,5 +1,10 @@
-export default function useChatQuery(chatId: string) {
-  const { chats } = useChats()
-  const chat = computed(() => chats.value.find((c) => c.id === chatId))
+export default async function useChatQuery(chatId: ChatId) {
+  const { data: chat } = await useFetch<ChatWithProject>(
+    `/api/chats/${chatId}`,
+    {
+      method: 'GET',
+      key: `chat.${chatId}`,
+    },
+  )
   return chat
 }

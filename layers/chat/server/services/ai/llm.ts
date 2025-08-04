@@ -79,7 +79,7 @@ export async function generateChatTitle(
       {
         role: 'system',
         content:
-          'Summarize the key points of the conversation in a concise way that would be helpful as context for future interactions. Make the message in 3 or less shirt words.',
+          'Summarize the key points of the conversation in a concise way that would be helpful as context for future interactions. Make the message in 3 or less shirt words. Do not put any punctuation marks. Always start with the capital letter.',
       },
       ...convertToModelMessages([firstMessage]),
     ],

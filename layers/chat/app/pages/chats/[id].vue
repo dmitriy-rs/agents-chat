@@ -5,7 +5,7 @@ definePageMeta({
 const route = useRoute()
 const chatId = route.params.id as string
 
-const chat = useChatQuery(chatId)
+const chat = await useChatQuery(chatId)
 
 if (!chat.value) {
   await navigateTo('/', { replace: true })
@@ -13,7 +13,11 @@ if (!chat.value) {
 
 const { messages, error, pending } = await useChatMessagesQuery(chatId)
 
-useChatPageHead(chat)
+watch(chat, (v) => {
+  console.log(v)
+})
+
+useChatPageHead(chat.value)
 </script>
 
 <template>

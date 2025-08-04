@@ -11,10 +11,13 @@ export default defineLazyEventHandler(async () => {
   return defineEventHandler(async (event) => {
     const { id: chatId } = getRouterParams(event)
     const { message } = await readBody<{
-      message: ChatMessage
+      message: Omit<ChatMessage, 'id'>
     }>(event)
 
-    await createMessageForChat(chatId, message)
+    await createMessageForChat(chatId, {
+      ...message,
+      id: uuid(),
+    })
 
     const dbMessages = getMessagesByChatId(chatId)
     const messages = dbMessages.map(mapToUIMessage)

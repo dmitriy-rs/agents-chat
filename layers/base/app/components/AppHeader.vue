@@ -23,7 +23,7 @@ const { toggleSidebar } = useAppSidebar()
       </UButton>
     </div>
     <div class="text-lg font-semibold">
-      {{ title ?? appConfig.title }}
+      <TypeWriterText :text="title ?? appConfig.title" />
     </div>
     <div class="header-right">
       <!-- Nothing to see here! -->
