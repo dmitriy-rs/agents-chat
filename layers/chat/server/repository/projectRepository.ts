@@ -5,7 +5,9 @@ import { uuid } from '../../shared/utils/utils'
 const projects: Project[] = [MOCK_PROJECT]
 
 export function getAllProjects(): Project[] {
-  return [...projects].sort((a, b) => a.name.localeCompare(b.name))
+  return [...projects].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+  )
 }
 
 export function getProjectById(id: string): Project | null {

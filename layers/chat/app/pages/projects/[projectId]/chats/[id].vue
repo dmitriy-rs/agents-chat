@@ -1,25 +1,27 @@
 <script setup lang="ts">
 const route = useRoute()
-const { chat, messages, sendMessage, isPending } = useChat(
-  route.params.id as string,
-)
+const chatId = route.params.id as ChatId
+const chat = await useChatQuery(chatId)
 
 if (!chat.value) {
-  await navigateTo(`/projects/${route.params.projectId}`, {
-    replace: true,
-  })
+  await navigateTo('/', { replace: true })
 }
+
+const { messages, error, pending } = await useChatMessagesQuery(chatId)
 
 useChatPageHead(chat)
 </script>
 
 <template>
   <ChatWindow
-    v-if="chat"
-    :id="chat.id"
-    :title="chat.title"
-    :messages
-    :is-pending
-    @send-message="sendMessage"
+    v-if="!error && !pending"
+    :id="chatId"
+    :initial-messages="messages"
+  />
+
+  <UAlert
+    v-else-if="error"
+    title="Ops, error appeared"
+    description="Please try again later. Make sure that chat exists and you have a permission for it"
   />
 </template>

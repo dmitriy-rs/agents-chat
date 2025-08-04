@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const route = useRoute()
-const projectId = route.params.projectId as string
+const projectId = route.params.projectId as ProjectId
 
-const { project, updateProject } = useProject(projectId)
-const { createProjectChat } = useChats()
+const { project, updateProject } = await useProjectQuery(projectId)
+const { createChatInProject } = useChats()
 
 if (!project.value) {
   await navigateTo('/', {
@@ -14,12 +14,12 @@ if (!project.value) {
 const onChatPage = computed(() => !!route.params.id)
 
 async function handleNewChat() {
-  createProjectChat(projectId)
+  createChatInProject(projectId)
 }
 </script>
 
 <template>
-  <div class="p-4 h-[calc(100%-4rem)]">
+  <div class="p-4 flex flex-col h-[calc(100%-4rem)]">
     <div
       v-if="project"
       class="flex items-start justify-between mb-6 pb-4 border-b border-default"

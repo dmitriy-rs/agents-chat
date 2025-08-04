@@ -26,7 +26,7 @@ export default function useChats() {
     navigateTo(`/chats/${chat.id}`)
   }
 
-  async function createProjectChat(projectId: string) {
+  async function createChatInProject(projectId: string) {
     const chat = await createNewChat({ projectId })
     navigateTo(`/projects/${projectId}/chats/${chat.id}`)
   }
@@ -35,5 +35,5 @@ export default function useChats() {
     return chats.value.filter((c) => c.projectId === projectId)
   }
 
-  return { chats, createChat, chatsInProject, createProjectChat }
+  return { chats, createChat, chatsInProject, createChatInProject }
 }

@@ -5,10 +5,6 @@ const projectId = route.params.projectId as string
 const { chatsInProject } = useChats()
 
 const chats = chatsInProject(projectId)
-
-function getLastUserMessage(chat: Chat) {
-  return chat.messages.find((message) => message.role === 'user')
-}
 </script>
 
 <template>
@@ -30,9 +26,9 @@ function getLastUserMessage(chat: Chat) {
           </template>
 
           <ChatTextMessage
-            v-if="chat.messages?.length"
+            v-if="chat.latestMessage"
             class="text-sm line-clamp-2 text-dimmed"
-            :message="getLastUserMessage(chat)!"
+            :message="chat.latestMessage"
           />
         </UCard>
       </NuxtLink>

@@ -1,34 +1,20 @@
 export default function useProjects() {
-  const projects = useState<Project[]>('projects', () => [MOCK_PROJECT])
+  const { data: projects } = useFetch<Project[]>('/api/projects', {
+    method: 'GET',
+    default: () => [],
+  })
 
-  const { createProjectChat } = useChats()
+  // const { createChatInProject } = useChats()
 
-  function createProject() {
-    const id = (projects.value.length + 1).toString()
+  async function createProject() {
+    await $fetch<Project>('/api/projects', {
+      method: 'POST',
+      body: {
+        name: 'New Project',
+      },
+    })
 
-    const existingNewProjects = projects.value.filter((project) =>
-      project.name.startsWith('New Project'),
-    )
-    const nextNewProjectIndex =
-      existingNewProjects.length > 0
-        ? Math.max(
-            ...existingNewProjects.map((p) => {
-              const match = p.name.match(/New Project (\d+)/)
-              return match ? parseInt(match[1]!) : 0
-            }),
-          ) + 1
-        : 1
-
-    const project: Project = {
-      id,
-      name: `New Project ${nextNewProjectIndex}`,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }
-
-    projects.value.push(project)
-
-    createProjectChat(id)
+    // await createChatInProject(project.id)
   }
 
   return { projects, createProject }

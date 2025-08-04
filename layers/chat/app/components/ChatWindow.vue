@@ -8,8 +8,6 @@ const { chat, isPending, sendMessage } = useChat(id, initialMessages)
 
 const isEmpty = computed(() => chat.messages.length === 0)
 const messages = computed(() => {
-  console.log(chat.messages)
-
   return chat.messages
 })
 
@@ -19,7 +17,7 @@ const { shouldShowScrollButton, scrollToBottom } = useChatScroll(messages)
 <template>
   <div
     ref="scrollContainer"
-    class="overflow-y-auto h-full w-full box-border font-mono"
+    class="overflow-y-auto w-full box-border flex-grow flex-shrink basis-auto min-h-0 font-mono"
   >
     <UContainer class="max-w-4xl h-full space-y-6">
       <ChatEmptyState v-if="isEmpty">
