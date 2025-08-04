@@ -36,8 +36,9 @@ export default function useAppSidebarProjects() {
     return baseItem
   }
 
-  const projectsNavigation = computed(() =>{ 
-    return projects.value.map(formatProject)})
+  const projectsNavigation = computed(() => {
+    return projects.value.map(formatProject)
+  })
 
   return {
     projects: projectsNavigation,
