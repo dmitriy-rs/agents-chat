@@ -19,7 +19,7 @@ export default defineLazyEventHandler(async () => {
       id: uuid(),
     })
 
-    const dbMessages = getMessagesByChatId(chatId)
+    const dbMessages = await getMessagesByChatId(chatId)
     const messages = dbMessages.map(mapToUIMessage)
 
     const stream = await streamChatResponse({
