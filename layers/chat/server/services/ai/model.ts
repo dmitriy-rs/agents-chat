@@ -1,5 +1,5 @@
 import { createOpenAI } from '@ai-sdk/openai'
-import { createGroq } from '@ai-sdk/groq';
+import { createGroq } from '@ai-sdk/groq'
 import type { OpenAIChatModelId } from '@ai-sdk/openai/internal'
 
 export function createOpenAIModel() {
@@ -17,6 +17,6 @@ export function createGroqAIModel() {
 
   const groq = createGroq({ apiKey })
 
-  return (model: Parameters<typeof groq>[0] = 'openai/gpt-oss-20b') => groq(model)
+  return (model: Parameters<typeof groq>[0] = 'openai/gpt-oss-20b') =>
+    groq(model)
 }
-
