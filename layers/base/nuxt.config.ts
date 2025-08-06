@@ -6,7 +6,11 @@ export default defineNuxtConfig({
   css: ['./layers/base/app/assets/css/main.css'],
 
   fonts: {
-    families: [{ name: 'Sora', provider: 'google' }, {name: 'Google Sans Code', provider: 'google'}, {name: 'Epilogue', provider: 'google'}],
+    families: [
+      { name: 'Sora', provider: 'google' },
+      { name: 'Google Sans Code', provider: 'google' },
+      { name: 'Epilogue', provider: 'google' },
+    ],
   },
 
   modules: ['@nuxt/ui', '@vueuse/nuxt', '@nuxtjs/mdc'],

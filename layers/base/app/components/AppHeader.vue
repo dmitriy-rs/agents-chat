@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AppColorModeButton from './AppColorModeButton.vue'
+
 defineProps<{
   title?: string
 }>()
@@ -26,7 +28,7 @@ const { toggleSidebar } = useAppSidebar()
       <TypeWriterText :text="title ?? appConfig.title" />
     </div>
     <div class="header-right">
-      <!-- Nothing to see here! -->
+      <AppColorModeButton />
     </div>
   </header>
 </template>

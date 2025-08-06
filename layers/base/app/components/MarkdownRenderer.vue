@@ -63,7 +63,7 @@ ast.value = await parseMarkdown(content)
 
 .markdown-content pre {
   font-size: 0.875rem;
-  background-color: var(--ui-bg-muted);
+  background-color: oklch(0.279 0.041 260.031);
   color: var(--color-white);
   padding: 1rem;
   border-radius: var(--ui-radius);
