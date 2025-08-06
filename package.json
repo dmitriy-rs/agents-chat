@@ -13,6 +13,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@ai-sdk/groq": "^2.0.2",
     "@ai-sdk/openai": "2.0.0",
     "@ai-sdk/vue": "2.0.0",
     "@nuxt/eslint": "1.7.1",

@@ -1,9 +1,9 @@
 import { updateChat } from '../../../repository/chatRepository'
 import { generateChatTitle } from '../../../services/ai/llm'
-import { createOpenAIModel } from '../../../services/ai/model'
+import { createGroqAIModel } from '../../../services/ai/model'
 
 export default defineLazyEventHandler(async () => {
-  const openai = createOpenAIModel()
+  const model = createGroqAIModel()
 
   return defineEventHandler(async (event) => {
     const { id: chatId } = getRouterParams(event)
@@ -11,7 +11,7 @@ export default defineLazyEventHandler(async () => {
       message: ChatMessage
     }>(event)
 
-    const title = await generateChatTitle(openai(), message)
+    const title = await generateChatTitle(model(), message)
 
     return updateChat(chatId, {
       title,

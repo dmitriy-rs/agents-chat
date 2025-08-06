@@ -5,5 +5,6 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     openaiApiKey: '',
+    groqApiKey: ''
   },
 })

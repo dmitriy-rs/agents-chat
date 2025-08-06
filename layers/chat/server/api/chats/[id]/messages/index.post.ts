@@ -1,12 +1,12 @@
 import { getMessagesByChatId } from '../../../../repository/messagesRepository'
-import { createOpenAIModel } from '../../../../services/ai/model'
+import { createGroqAIModel } from '../../../../services/ai/model'
 import { streamChatResponse } from '../../../../services/ai/llm'
 import { JsonToSseTransformStream } from 'ai'
 import { createMessageForChat } from '../../../../repository/chatRepository'
 import { mapToUIMessage } from '../../../../db/mapper'
 
 export default defineLazyEventHandler(async () => {
-  const openai = createOpenAIModel()
+  const model = createGroqAIModel()
 
   return defineEventHandler(async (event) => {
     const { id: chatId } = getRouterParams(event)
@@ -23,7 +23,7 @@ export default defineLazyEventHandler(async () => {
     const messages = dbMessages.map(mapToUIMessage)
 
     const stream = await streamChatResponse({
-      model: openai('gpt-4o-mini'),
+      model: model(),
       messages,
       onFinish: async ({ responseMessage }) => {
         await createMessageForChat(chatId, responseMessage)
