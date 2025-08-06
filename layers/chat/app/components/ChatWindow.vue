@@ -17,7 +17,7 @@ const { shouldShowScrollButton, scrollToBottom } = useChatScroll(messages)
 <template>
   <div
     ref="scrollContainer"
-    class="overflow-y-auto h-full w-full box-border font-mono"
+    class="overflow-y-auto h-full w-full box-border"
   >
     <UContainer class="max-w-4xl h-full space-y-6">
       <ChatEmptyState v-if="isEmpty">
