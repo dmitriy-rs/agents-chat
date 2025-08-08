@@ -4,15 +4,20 @@ import { streamChatResponse } from '../../../../services/ai/llm'
 import { JsonToSseTransformStream } from 'ai'
 import { createMessageForChat } from '../../../../repository/chatRepository'
 import { mapToUIMessage } from '../../../../db/mapper'
+import { CreateMessageSchema } from '../../../../schemas'
+import { invariantResponse } from '../../../../utils'
 
 export default defineLazyEventHandler(async () => {
   const model = createChatModel()
 
   return defineEventHandler(async (event) => {
     const { id: chatId } = getRouterParams(event)
-    const { message } = await readBody<{
-      message: Omit<ChatMessage, 'id'>
-    }>(event)
+    const { success, data } = await readValidatedBody(
+      event,
+      CreateMessageSchema.safeParse,
+    )
+    invariantResponse(success, 400, 'Bad Request')
+    const { message } = data
 
     await createMessageForChat(chatId, {
       ...message,

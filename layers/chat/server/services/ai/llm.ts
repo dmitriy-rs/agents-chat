@@ -71,7 +71,7 @@ export async function streamChatResponse({
 
 export async function generateChatTitle(
   model: LanguageModelV2,
-  firstMessage: UIMessage,
+  firstMessage: Omit<UIMessage, 'id'>,
 ) {
   const response = await generateText({
     model,
