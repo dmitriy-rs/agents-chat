@@ -8,7 +8,7 @@ export function createOpenAIModel() {
 
   const openai = createOpenAI({ apiKey })
 
-  return (model: OpenAIChatModelId = 'gpt-4o-mini') => openai(model)
+  return (model: OpenAIChatModelId = 'gpt-5-mini') => openai(model)
 }
 
 export function createGroqAIModel() {
@@ -19,4 +19,8 @@ export function createGroqAIModel() {
 
   return (model: Parameters<typeof groq>[0] = 'openai/gpt-oss-20b') =>
     groq(model)
+}
+
+export function createChatModel() {
+  return createOpenAIModel()
 }

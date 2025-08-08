@@ -1,12 +1,12 @@
 import { getMessagesByChatId } from '../../../../repository/messagesRepository'
-import { createGroqAIModel } from '../../../../services/ai/model'
+import { createChatModel } from '../../../../services/ai/model'
 import { streamChatResponse } from '../../../../services/ai/llm'
 import { JsonToSseTransformStream } from 'ai'
 import { createMessageForChat } from '../../../../repository/chatRepository'
 import { mapToUIMessage } from '../../../../db/mapper'
 
 export default defineLazyEventHandler(async () => {
-  const model = createGroqAIModel()
+  const model = createChatModel()
 
   return defineEventHandler(async (event) => {
     const { id: chatId } = getRouterParams(event)

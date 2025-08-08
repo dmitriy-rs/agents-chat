@@ -42,7 +42,7 @@ export async function getAllChats(): Promise<ChatWithProject[]> {
     }),
   )
   return transformedChats.sort(
-    (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime(),
+    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
   )
 }
 
