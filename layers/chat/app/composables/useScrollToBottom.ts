@@ -41,7 +41,7 @@ export default function useScrollToBottom(
       setTimeout(() => {
         measure()
         scrollToBottom(true)
-      }, 30)
+      }, 60)
     }
   }
 

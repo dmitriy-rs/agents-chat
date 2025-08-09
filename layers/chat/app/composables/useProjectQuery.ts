@@ -7,17 +7,5 @@ export default async function useProjectQuery(projectId: ProjectId) {
     },
   )
 
-  async function updateProject(updatedProject: Partial<Project>) {
-    await $fetch<Project>(`/api/projects/${projectId}`, {
-      method: 'PUT',
-      body: {
-        ...updatedProject,
-      },
-      async onResponse() {
-        await refreshNuxtData(`project.${projectId}`)
-      },
-    })
-  }
-
-  return { project, updateProject }
+  return { project }
 }

@@ -29,6 +29,7 @@ export interface ChatWithProject extends Chat {
 
 export const metadataSchema = z.object({
   createdAt: z.string(),
+  updatedAt: z.string(),
 })
 
 export type ChatMessageMetadata = z.infer<typeof metadataSchema>

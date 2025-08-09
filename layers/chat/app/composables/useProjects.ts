@@ -2,6 +2,7 @@ export default function useProjects() {
   const { data: projects } = useFetch<Project[]>('/api/projects', {
     method: 'GET',
     default: () => [],
+    key: 'projects',
   })
 
   // const { createChatInProject } = useChats()

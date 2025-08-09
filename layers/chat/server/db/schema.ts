@@ -47,6 +47,7 @@ export const parts = pgTable(
       .notNull(),
     type: varchar().$type<ChatMessage['parts'][0]['type']>().notNull(),
     createdAt: timestamp().defaultNow().notNull(),
+    updatedAt: timestamp().defaultNow().notNull(),
     order: integer().notNull().default(0),
 
     // Text fields
@@ -110,6 +111,7 @@ export type DBMessage = {
   id: string
   chatId: string
   createdAt: Date
+  updatedAt: Date
   role: ChatMessage['role']
   parts: DBMessagePart[]
   metadata?: unknown

@@ -2,14 +2,16 @@
 const route = useRoute()
 const projectId = route.params.projectId as ProjectId
 
-const { project, updateProject } = await useProjectQuery(projectId)
-const { createChatInProject } = useChats()
+const { project } = await useProjectQuery(projectId)
 
 if (!project.value) {
   await navigateTo('/', {
     replace: true,
   })
 }
+
+const { updateProject } = useProjectUpdateMutation(projectId)
+const { createChatInProject } = useChats()
 
 const onChatPage = computed(() => !!route.params.id)
 

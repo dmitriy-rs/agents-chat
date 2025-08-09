@@ -2,13 +2,12 @@ import { z } from 'zod'
 
 const MessageRole = z.enum(['user', 'assistant'])
 
-export const MessageSchema = z
-  .object({
-    parts: z.array(z.any()),
-    role: MessageRole,
-    id: z.uuid().optional(),
-    chatId: z.uuid().optional(),
-  })
+export const MessageSchema = z.object({
+  parts: z.array(z.any()),
+  role: MessageRole,
+  id: z.uuid().optional(),
+  chatId: z.uuid().optional(),
+})
 
 export const ChatMessageSchema = z
   .object({

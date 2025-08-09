@@ -8,14 +8,9 @@ export default function useGenerateChatTitle(chatId: ChatId) {
       async onResponse({ response }) {
         await refreshNuxtData(`chat.${chatId}`)
 
-        const chat: ChatWithProject = response._data
-        const chatIndex = (chats.value ?? []).findIndex((c) => c.id === chatId)
-        if (chatIndex !== -1 && chats.value) {
-          chats.value = [
-            ...chats.value.slice(0, chatIndex),
-            chat,
-            ...chats.value.slice(chatIndex + 1),
-          ]
+        if (chats.value) {
+          const newChat: ChatWithProject = response._data
+          chats.value = chats.value.map((c) => (c.id === chatId ? newChat : c))
         }
       },
     })

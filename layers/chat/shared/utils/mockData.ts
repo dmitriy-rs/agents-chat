@@ -10,7 +10,7 @@ export const MOCK_PROJECT: Project = {
 }
 
 export const MOCK_CHAT: Chat = {
-  id: '1',
+  id: '1' as Chat['id'],
   title: 'Nuxt.js project help',
   // projectId: MOCK_PROJECT.id,
   createdAt: new Date(),
@@ -30,6 +30,7 @@ export const MOCK_MESSAGES: DBMessage[] = [
     ],
     role: 'user',
     createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
     chatId: MOCK_CHAT.id,
@@ -44,6 +45,7 @@ export const MOCK_MESSAGES: DBMessage[] = [
     ],
     role: 'assistant',
     createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
     chatId: MOCK_CHAT.id,
@@ -57,6 +59,7 @@ export const MOCK_MESSAGES: DBMessage[] = [
     ],
     role: 'user',
     createdAt: new Date(),
+    updatedAt: new Date(),
   },
   {
     chatId: MOCK_CHAT.id,
@@ -71,5 +74,6 @@ export const MOCK_MESSAGES: DBMessage[] = [
     ],
     role: 'assistant',
     createdAt: new Date(),
+    updatedAt: new Date(),
   },
 ]

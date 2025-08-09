@@ -9,6 +9,7 @@ export function mapToUIMessage(message: DBMessage): ChatMessage {
     parts: mapDBPartToUIMessagePart(message.parts),
     metadata: {
       createdAt: formatISO(message.createdAt),
+      updatedAt: formatISO(message.updatedAt),
     },
   }
 }
@@ -21,7 +22,12 @@ export function mapToDBMessage(
     id: message.id,
     role: message.role as 'user' | 'assistant' | 'system',
     parts: mapUIMessagePartsToDBParts(message.parts, message.id),
-    createdAt: new Date(),
+    createdAt: message.metadata?.createdAt
+      ? new Date(message.metadata.createdAt)
+      : new Date(),
+    updatedAt: message.metadata?.updatedAt
+      ? new Date(message.metadata.updatedAt)
+      : new Date(),
     chatId,
   }
 }
