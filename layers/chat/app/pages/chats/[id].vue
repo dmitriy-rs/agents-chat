@@ -19,11 +19,16 @@ useChatPageHead(chat.value)
   <NuxtLayout v-if="chat" name="no-header">
     <AppHeader :title="chat.title" />
 
-    <ChatWindow
-      v-if="!error && !pending"
-      :id="chat.id"
-      :initial-messages="messages"
-    />
+    <NuxtErrorBoundary v-if="!error && !pending">
+      <ChatWindow :id="chat.id" :initial-messages="messages" />
+
+      <template #error>
+        <UAlert
+          :title="`Ops, error appeared`"
+          description="Please try again later."
+        />
+      </template>
+    </NuxtErrorBoundary>
 
     <UAlert
       v-else-if="error"

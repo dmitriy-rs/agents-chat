@@ -30,4 +30,10 @@ export default defineNuxtConfig({
       include: ['debug'],
     },
   },
+
+  routeRules: {
+    '/': {
+      prerender: true,
+    }
+  }
 })

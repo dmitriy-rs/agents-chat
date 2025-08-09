@@ -10,7 +10,7 @@ export type ProjectId = Brand<'ProjectId'>
 export interface Chat {
   id: ChatId
   title: string
-  projectId?: string
+  projectId?: ProjectId
   createdAt: Date
   updatedAt: Date
 }
