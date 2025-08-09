@@ -17,6 +17,7 @@
     "@ai-sdk/openai": "2.0.7",
     "@ai-sdk/vue": "2.0.8",
     "@nuxt/eslint": "1.8.0",
+    "@nuxt/image": "^1.11.0",
     "@nuxt/ui": "^3.3.0",
     "@vueuse/core": "^13.6.0",
     "ai": "^5.0.8",
