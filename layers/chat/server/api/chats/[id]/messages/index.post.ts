@@ -12,11 +12,11 @@ export default defineLazyEventHandler(async () => {
 
   return defineEventHandler(async (event) => {
     const { id: chatId } = getRouterParams(event)
-    const { success, data } = await readValidatedBody(
+    const { success, data, error } = await readValidatedBody(
       event,
       CreateMessageSchema.safeParse,
     )
-    invariantResponse(success, 400, 'Bad Request')
+    invariantResponse(success, 400, `Bad Request`, error)
     const { message } = data
 
     await createMessageForChat(chatId, {

@@ -9,7 +9,6 @@ export const MessageSchema = z
     id: z.uuid().optional(),
     chatId: z.uuid().optional(),
   })
-  .strict()
 
 export const ChatMessageSchema = z
   .object({

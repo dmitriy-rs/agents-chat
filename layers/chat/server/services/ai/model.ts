@@ -22,5 +22,5 @@ export function createGroqAIModel() {
 }
 
 export function createChatModel() {
-  return createOpenAIModel()
+  return createGroqAIModel()
 }

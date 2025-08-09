@@ -14,12 +14,10 @@ export default function useChat(
     generateId: uuid,
     transport: new DefaultChatTransport({
       api: `/api/chats/${chatId}/messages`,
-      prepareSendMessagesRequest({ messages, id, body }) {
+      prepareSendMessagesRequest({ messages }) {
         return {
           body: {
-            id,
             message: messages.at(-1),
-            ...body,
           },
         }
       },
