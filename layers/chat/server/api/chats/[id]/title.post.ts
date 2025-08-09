@@ -1,11 +1,11 @@
 import { updateChat } from '../../../repository/chatRepository'
 import { UpdateChatTitleSchema } from '../../../schemas'
 import { generateChatTitle } from '../../../services/ai/llm'
-import { createChatModel } from '../../../services/ai/model'
+import { createOpenAIModel } from '../../../services/ai/model'
 import { invariantResponse } from '../../../utils'
 
 export default defineLazyEventHandler(async () => {
-  const model = createChatModel()
+  const model = createOpenAIModel()
 
   return defineEventHandler(async (event) => {
     const { id: chatId } = getRouterParams(event)

@@ -46,3 +46,9 @@ export const UpdateChatTitleSchema = z
     message: MessageSchema,
   })
   .strict()
+
+export const UpdateChatSchema = z
+  .object({
+    projectId: z.uuid(),
+  })
+  .strict()

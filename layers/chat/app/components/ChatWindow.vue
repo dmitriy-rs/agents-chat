@@ -1,15 +1,13 @@
 <script setup lang="ts">
 const { id, initialMessages } = defineProps<{
-  id: string
+  id: ChatId
   initialMessages: ChatMessage[]
 }>()
 
 const { chat, isPending, sendMessage } = useChat(id, initialMessages)
 
 const isEmpty = computed(() => chat.messages.length === 0)
-const messages = computed(() => {
-  return chat.messages
-})
+const messages = computed(() => chat.messages)
 
 const { shouldShowScrollButton, scrollToBottom } = useChatScroll(messages)
 </script>

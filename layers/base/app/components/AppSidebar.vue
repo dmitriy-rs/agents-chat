@@ -6,6 +6,14 @@ const { createProject } = useProjects()
 
 const { projects } = useAppSidebarProjects()
 const { chats } = useAppSidebarChats()
+
+const updateChatId = ref<ChatId | null>(null)
+
+function setUpdateChatId(e: MouseEvent, chatId: ChatId | null) {
+  e.stopImmediatePropagation()
+  e.preventDefault()
+  updateChatId.value = chatId
+}
 </script>
 
 <template>
@@ -46,8 +54,32 @@ const { chats } = useAppSidebarChats()
           class="w-full mb-4"
           :items="list"
           default-open
-        />
+        >
+          <template #item="{ item }">
+            <NuxtLink
+              :to="item.to"
+              class="flex items-center justify-between w-full rounded hover:bg-muted"
+            >
+              {{ item.label }}
+
+              <UButton
+                class="group-hover:opacity-100 opacity-0 ml-auto"
+                color="neutral"
+                variant="soft"
+                size="xs"
+                icon="i-heroicons-folder-plus"
+                @click="setUpdateChatId($event, item.id)"
+              />
+            </NuxtLink>
+          </template>
+        </UNavigationMenu>
       </div>
+
+      <LazyAssignToProjectModal
+        v-if="!!updateChatId"
+        :chat-id="updateChatId"
+        @close="updateChatId = null"
+      />
     </div>
 
     <div v-else class="overflow-y-auto p-4">

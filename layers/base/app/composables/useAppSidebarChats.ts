@@ -23,6 +23,8 @@ export default function useAppSidebarChats() {
       to: `/chats/${chat.id}`,
       defaultOpen: true,
       active: route.params.id === chat.id,
+      id: chat.id,
+      prefetch: true,
     }
   }
 

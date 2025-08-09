@@ -13,12 +13,26 @@ export function createOpenAIModel() {
 
 export function createGroqAIModel() {
   const apiKey = useRuntimeConfig().groqApiKey
-  if (!apiKey) throw new Error('Missing OpenAI API key')
+  if (!apiKey) throw new Error('Missing Groq API key')
 
   const groq = createGroq({ apiKey })
 
   return (model: Parameters<typeof groq>[0] = 'openai/gpt-oss-20b') =>
     groq(model)
+}
+
+export function createDolphinAIModel() {
+  const apiKey = useRuntimeConfig().hfToken
+  if (!apiKey) throw new Error('Missing HuggingFace token')
+
+  const openai = createOpenAI({
+    apiKey,
+    baseURL: 'https://router.huggingface.co/v1',
+  })
+
+  return (
+    model: OpenAIChatModelId = 'dphn/Dolphin-Mistral-24B-Venice-Edition:featherless-ai',
+  ) => openai(model)
 }
 
 export function createChatModel() {
