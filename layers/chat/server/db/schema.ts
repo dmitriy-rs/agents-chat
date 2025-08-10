@@ -85,12 +85,16 @@ export const messages = pgTable(
     chatId: varchar()
       .references(() => chats.id, { onDelete: 'cascade' })
       .notNull(),
+    userId: varchar()
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
     role: varchar().$type<ChatMessage['role']>().notNull(),
 
     ...timestamps,
   },
   (table) => [
     index('messages_chat_id_idx').on(table.chatId),
+    index('messages_user_id_idx').on(table.userId),
     index('messages_chat_id_created_at_idx').on(table.chatId, table.createdAt),
   ],
 )

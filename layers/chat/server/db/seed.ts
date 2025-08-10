@@ -164,12 +164,14 @@ async function createChat(
 async function createMessage(
   messageData: { role: ChatMessage['role']; parts: ChatMessage['parts'] },
   chatId: string,
+  userId: string,
   index: number,
 ) {
   const [message] = await db
     .insert(messages)
     .values({
       role: messageData.role,
+      userId,
       chatId,
     })
     .returning()
@@ -203,7 +205,7 @@ async function seedDatabase() {
     )
 
     for (const [index, messageData] of chatData.messages.entries()) {
-      await createMessage(messageData, chat.id, index)
+      await createMessage(messageData, chat.id, createdUsers[0].id, index)
     }
   }
 }
