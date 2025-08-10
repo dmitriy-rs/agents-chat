@@ -1,4 +1,4 @@
-import type { Project } from '../../shared/types/chat'
+import type { Project, ProjectId, UserId } from '../../shared/types/chat'
 import db from '../db'
 import { projects } from '../db/schema'
 import { and, eq, desc } from 'drizzle-orm'
@@ -12,7 +12,7 @@ import {
 } from '../db/utils'
 
 export async function getAllProjects(
-  userId: string,
+  userId: UserId,
   options?: PaginationOptions,
 ): Promise<PaginatedResponse<Project>> {
   const { limit, offset } = getPaginationParams(options)
@@ -27,8 +27,8 @@ export async function getAllProjects(
 }
 
 export async function getProjectById(
-  userId: string,
-  id: string,
+  userId: UserId,
+  id: ProjectId,
 ): Promise<Project | null> {
   const project = await db.query.projects.findFirst({
     where: and(eq(projects.id, id), eq(projects.userId, userId)),
@@ -37,7 +37,7 @@ export async function getProjectById(
 }
 
 export async function createProject(
-  userId: string,
+  userId: UserId,
   data: { name: string },
 ): Promise<Project> {
   const [newProject] = await db
@@ -51,8 +51,8 @@ export async function createProject(
 }
 
 export async function updateProject(
-  userId: string,
-  id: string,
+  userId: UserId,
+  id: ProjectId,
   data: { name: string },
 ): Promise<Project | null> {
   const [updatedProject] = await db
@@ -64,8 +64,8 @@ export async function updateProject(
 }
 
 export async function deleteProject(
-  userId: string,
-  id: string,
+  userId: UserId,
+  id: ProjectId,
 ): Promise<boolean> {
   const result = await db
     .delete(projects)

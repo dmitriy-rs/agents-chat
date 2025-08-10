@@ -2,6 +2,7 @@ import type {
   ChatWithProject,
   ChatMessage,
   UserId,
+  ChatId,
 } from '../../shared/types/chat'
 import db from '../db'
 import { chats, projects, messages, parts } from '../db/schema'
@@ -67,8 +68,8 @@ export async function createChat(
 }
 
 export async function getChatById(
-  userId: string,
-  chatId: string,
+  userId: UserId,
+  chatId: ChatId,
 ): Promise<ChatWithProject | null> {
   const chat = await db.query.chats.findFirst({
     where: and(eq(chats.id, chatId), eq(chats.userId, userId)),
@@ -88,12 +89,12 @@ export async function getChatById(
 }
 
 export async function updateChat(
-  userId: string,
+  userId: UserId,
   {
     title,
     projectId,
     chatId,
-  }: { title?: string; projectId?: string; chatId: string },
+  }: { title?: string; projectId?: string; chatId: ChatId },
 ): Promise<ChatWithProject | null> {
   const [updatedChat] = await db
     .update(chats)
@@ -104,8 +105,8 @@ export async function updateChat(
 }
 
 export async function deleteChat(
-  userId: string,
-  chatId: string,
+  userId: UserId,
+  chatId: ChatId,
 ): Promise<boolean> {
   const result = await db
     .delete(chats)
@@ -115,8 +116,8 @@ export async function deleteChat(
 }
 
 export async function createMessageForChat(
-  userId: string,
-  chatId: string,
+  userId: UserId,
+  chatId: ChatId,
   data: ChatMessage,
 ): Promise<void> {
   const chat = await db.query.chats.findFirst({
