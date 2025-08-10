@@ -1,6 +1,11 @@
 import type { H3Error } from 'h3'
 import { createError } from 'h3'
 import z from 'zod'
+import { v4 } from 'uuid'
+
+export function uuid<T extends string>() {
+  return v4() as T
+}
 
 export function invariantResponse<T>(
   condition: T,

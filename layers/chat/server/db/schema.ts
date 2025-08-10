@@ -10,7 +10,15 @@ import {
 } from 'drizzle-orm/pg-core'
 import type { ChatMessage, ChatProviderMetadata } from '../../shared/types/chat'
 import { sql } from 'drizzle-orm'
-import { uuid } from '../../shared/utils/utils'
+import { uuid } from '../utils'
+
+const timestamps = {
+  createdAt: timestamp().defaultNow().notNull(),
+  updatedAt: timestamp()
+    .defaultNow()
+    .notNull()
+    .$onUpdate(() => new Date()),
+}
 
 export const users = pgTable(
   'users',
@@ -23,8 +31,7 @@ export const users = pgTable(
     provider: varchar(),
     providerId: varchar().unique(),
 
-    createdAt: timestamp().defaultNow().notNull(),
-    updatedAt: timestamp().defaultNow().notNull(),
+    ...timestamps,
   },
   (table) => [
     index('users_email_idx').on(table.email),
@@ -43,8 +50,7 @@ export const projects = pgTable(
       .notNull(),
     name: varchar().notNull(),
 
-    createdAt: timestamp().defaultNow().notNull(),
-    updatedAt: timestamp().defaultNow().notNull(),
+    ...timestamps,
   },
   (table) => [index('projects_user_id_idx').on(table.userId)],
 )
@@ -61,8 +67,7 @@ export const chats = pgTable(
     projectId: varchar().references(() => projects.id, { onDelete: 'cascade' }),
     title: varchar().notNull(),
 
-    createdAt: timestamp().defaultNow().notNull(),
-    updatedAt: timestamp().defaultNow().notNull(),
+    ...timestamps,
   },
   (table) => [
     index('chats_user_id_idx').on(table.userId),
@@ -82,8 +87,7 @@ export const messages = pgTable(
       .notNull(),
     role: varchar().$type<ChatMessage['role']>().notNull(),
 
-    createdAt: timestamp().defaultNow().notNull(),
-    updatedAt: timestamp().defaultNow().notNull(),
+    ...timestamps,
   },
   (table) => [
     index('messages_chat_id_idx').on(table.chatId),
@@ -101,8 +105,7 @@ export const parts = pgTable(
       .references(() => messages.id, { onDelete: 'cascade' })
       .notNull(),
     type: varchar().$type<ChatMessage['parts'][0]['type']>().notNull(),
-    createdAt: timestamp().defaultNow().notNull(),
-    updatedAt: timestamp().defaultNow().notNull(),
+    ...timestamps,
     order: integer().notNull().default(0),
 
     // Text fields

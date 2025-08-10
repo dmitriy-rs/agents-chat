@@ -1,145 +1,165 @@
 import type {
-  Chat,
   ChatWithProject,
   ChatMessage,
+  UserId,
 } from '../../shared/types/chat'
-import { getProjectById } from './projectRepository'
-import {
-  createMessageByChatId,
-  deleteMessagesByChatId,
-  getLastMessageByChatId,
-} from './messagesRepository'
-import { uuid } from '../../shared/utils/utils'
+import { createMessageByChatId } from './messagesRepository'
 import { mapToUIMessage } from '../db/mapper'
+import db from '../db'
+import { chats, projects, messages, parts } from '../db/schema'
+import { eq, desc, and } from 'drizzle-orm'
+import {
+  type PaginationOptions,
+  type PaginatedResponse,
+  getPaginationParams,
+  getTableCount,
+  createPaginatedResponse,
+} from '../db/utils'
 
-const storage = useStorage<Chat[]>('db')
-const chatsKey = 'chats:all'
+export async function getAllChats(
+  userId: UserId,
+  options?: PaginationOptions,
+): Promise<PaginatedResponse<ChatWithProject>> {
+  const { limit, offset } = getPaginationParams(options)
 
-async function getChats() {
-  let chats = await storage.getItem(chatsKey)
+  const chatsWithRelations = await db.query.chats.findMany({
+    where: eq(chats.userId, userId),
+    with: {
+      project: true,
+      messages: {
+        where: eq(messages.role, 'user'),
+        orderBy: desc(messages.createdAt),
+        limit: 1,
+        with: {
+          parts: {
+            orderBy: parts.order,
+          },
+        },
+      },
+    },
+    orderBy: desc(chats.updatedAt),
+    limit,
+    offset,
+  })
 
-  if (!chats) {
-    chats = [MOCK_CHAT]
-    await saveChats(chats)
-  }
+  const total = await getTableCount(chats, eq(chats.userId, userId))
+  const data = chatsWithRelations.map((chat) => ({
+    ...chat,
+    latestMessage: mapToUIMessage(chat.messages[0]),
+  }))
 
-  return chats
+  return createPaginatedResponse(data, total, options)
 }
 
-async function saveChats(chats: Chat[]) {
-  await storage.setItem(chatsKey, chats)
-}
+export async function createChat(
+  userId: UserId,
+  data: {
+    title?: string
+    projectId?: string
+  },
+): Promise<ChatWithProject | null> {
+  const [newChat] = await db
+    .insert(chats)
+    .values({
+      title: data.title || 'New Chat',
+      projectId: data.projectId,
+      userId,
+    })
+    .returning()
 
-export async function getAllChats(): Promise<ChatWithProject[]> {
-  const chats = await getChats()
-  const transformedChats = await Promise.all(
-    chats.map(async (chat) => {
-      return {
-        ...chat,
-        latestMessage: await getLatestUIMessage(chat.id),
-        project: chat.projectId ? await getProjectById(chat.projectId) : null,
-      }
-    }),
-  )
-  return transformedChats.sort(
-    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-  )
-}
+  const project = data.projectId
+    ? await db.query.projects.findFirst({
+        where: eq(projects.id, data.projectId),
+      })
+    : null
 
-export async function createChat(data: {
-  title?: string
-  projectId?: string
-}): Promise<ChatWithProject | null> {
-  const now = new Date()
-  const newChat: Chat = {
-    id: uuid(),
-    title: data.title || 'New Chat',
-    projectId: data.projectId,
-    createdAt: now,
-    updatedAt: now,
-  }
-  const chats = await getChats()
-  chats.push(newChat)
-  await saveChats(chats)
   return {
     ...newChat,
-    project: data.projectId
-      ? (await getProjectById(data.projectId)) || null
-      : null,
+    project: project || null,
     latestMessage: null,
   }
 }
 
-export async function getChatById(id: string): Promise<ChatWithProject | null> {
-  const chats = await getChats()
-  const chat = chats.find((c) => c.id === id)
+export async function getChatById(
+  userId: string,
+  chatId: string,
+): Promise<ChatWithProject | null> {
+  const chat = await db.query.chats.findFirst({
+    where: and(eq(chats.id, chatId), eq(chats.userId, userId)),
+    with: {
+      project: true,
+      messages: {
+        where: eq(messages.role, 'user'),
+        orderBy: desc(messages.createdAt),
+        limit: 1,
+        with: {
+          parts: {
+            orderBy: parts.order,
+          },
+        },
+      },
+    },
+  })
+
   if (!chat) return null
+
   return {
     ...chat,
-    latestMessage: await getLatestUIMessage(chat.id),
-    project: chat.projectId
-      ? (await getProjectById(chat.projectId)) || null
-      : null,
+    latestMessage: mapToUIMessage(chat.messages[0]),
   }
 }
 
 export async function updateChat(
-  id: string,
-  data: { title?: string; projectId?: string },
+  userId: string,
+  {
+    title,
+    projectId,
+    chatId,
+  }: { title?: string; projectId?: string; chatId: string },
 ): Promise<ChatWithProject | null> {
-  const chats = await getChats()
-  const chatIndex = chats.findIndex((c) => c.id === id)
-  if (chatIndex === -1) return null
-  const chat = chats[chatIndex]
-  if (!chat) return null
-  const updatedChat: Chat = {
-    ...chat,
-    ...(data.title && { title: data.title }),
-    ...(data.projectId !== undefined && {
-      projectId: data.projectId,
-    }),
-    updatedAt: new Date(),
-  }
-  chats[chatIndex] = updatedChat
-  await saveChats(chats)
-  return {
-    ...updatedChat,
-    latestMessage: await getLatestUIMessage(chat.id),
-    project: updatedChat.projectId
-      ? (await getProjectById(updatedChat.projectId)) || null
-      : null,
-  }
+  const [updatedChat] = await db
+    .update(chats)
+    .set({
+      projectId,
+      title,
+    })
+    .where(and(eq(chats.id, chatId), eq(chats.userId, userId)))
+    .returning()
+
+  if (!updatedChat) return null
+
+  return getChatById(userId, updatedChat.id)
 }
 
-export async function deleteChat(id: string): Promise<boolean> {
-  const chats = await getChats()
-  const index = chats.findIndex((chat) => chat.id === id)
-  if (index !== -1) {
-    chats.splice(index, 1)
-    deleteMessagesByChatId(id)
-    await saveChats(chats)
-    return true
-  }
-  return false
+export async function deleteChat(
+  userId: string,
+  chatId: string,
+): Promise<boolean> {
+  const result = await db
+    .delete(chats)
+    .where(and(eq(chats.id, chatId), eq(chats.userId, userId)))
+    .returning()
+
+  return result.length > 0
 }
 
 export async function createMessageForChat(
+  userId: string,
   chatId: string,
   data: ChatMessage,
 ): Promise<void> {
-  const chats = await getChats()
-  const chat = chats.find((c) => c.id === chatId)
+  const chat = await db.query.chats.findFirst({
+    where: and(eq(chats.id, chatId), eq(chats.userId, userId)),
+  })
 
   if (!chat) {
     return
   }
 
   await createMessageByChatId(chatId, data)
-  chat.updatedAt = new Date()
-  await saveChats(chats)
-}
 
-async function getLatestUIMessage(chatId: string) {
-  const lastMessage = await getLastMessageByChatId(chatId)
-  return lastMessage && mapToUIMessage(lastMessage)
+  await db
+    .update(chats)
+    .set({ updatedAt: new Date() })
+    .where(eq(chats.id, chatId))
 }

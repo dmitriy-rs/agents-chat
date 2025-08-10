@@ -1,78 +1,75 @@
 import type { Project } from '../../shared/types/chat'
-import { MOCK_PROJECT } from '../../shared/utils/mockData'
-import { uuid } from '../../shared/utils/utils'
+import db from '../db'
+import { projects } from '../db/schema'
+import { and, eq, desc } from 'drizzle-orm'
 
-const storage = useStorage<Project[]>('db')
-const projectsKey = 'projects:all'
+import {
+  type PaginationOptions,
+  type PaginatedResponse,
+  getPaginationParams,
+  getTableCount,
+  createPaginatedResponse,
+} from '../db/utils'
 
-async function getProjects() {
-  let projects = await storage.getItem(projectsKey)
-
-  if (!projects) {
-    projects = [MOCK_PROJECT]
-    await saveProjects(projects)
-  }
-
-  return projects
+export async function getAllProjects(
+  userId: string,
+  options?: PaginationOptions,
+): Promise<PaginatedResponse<Project>> {
+  const { limit, offset } = getPaginationParams(options)
+  const data = await db.query.projects.findMany({
+    where: eq(projects.userId, userId),
+    orderBy: desc(projects.createdAt),
+    limit,
+    offset,
+  })
+  const total = await getTableCount(projects, eq(projects.userId, userId))
+  return createPaginatedResponse(data, total, options)
 }
 
-async function saveProjects(projects: Project[]) {
-  await storage.setItem(projectsKey, projects)
+export async function getProjectById(
+  userId: string,
+  id: string,
+): Promise<Project | null> {
+  const project = await db.query.projects.findFirst({
+    where: and(eq(projects.id, id), eq(projects.userId, userId)),
+  })
+  return project || null
 }
 
-export async function getAllProjects() {
-  const projects = await getProjects()
-  return [...projects].sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  )
-}
-
-export async function getProjectById(id: string) {
-  const projects = await getProjects()
-  return projects.find((p) => p.id === id) || null
-}
-
-export async function createProject(data: { name: string }): Promise<Project> {
-  const now = new Date()
-  const newProject: Project = {
-    id: uuid(),
-    name: data.name,
-    createdAt: now,
-    updatedAt: now,
-  }
-  const projects = await getProjects()
-  projects.push(newProject)
-  await saveProjects(projects)
+export async function createProject(
+  userId: string,
+  data: { name: string },
+): Promise<Project> {
+  const [newProject] = await db
+    .insert(projects)
+    .values({
+      userId,
+      name: data.name,
+    })
+    .returning()
   return newProject
 }
 
 export async function updateProject(
+  userId: string,
   id: string,
   data: { name: string },
 ): Promise<Project | null> {
-  const projects = await getProjects()
-  const projectIndex = projects.findIndex((p) => p.id === id)
-  if (projectIndex === -1) return null
-  const project = projects[projectIndex]
-  if (!project) return null
-  const updatedProject: Project = {
-    id: project.id,
-    name: data.name,
-    createdAt: project.createdAt,
-    updatedAt: new Date(),
-  }
-  projects[projectIndex] = updatedProject
-  await saveProjects(projects)
-  return updatedProject
+  const [updatedProject] = await db
+    .update(projects)
+    .set({ name: data.name })
+    .where(and(eq(projects.id, id), eq(projects.userId, userId)))
+    .returning()
+  return updatedProject || null
 }
 
-export async function deleteProject(id: string): Promise<boolean> {
-  const projects = await getProjects()
-  const index = projects.findIndex((project) => project.id === id)
-  if (index !== -1) {
-    projects.splice(index, 1)
-    await saveProjects(projects)
-    return true
-  }
-  return false
+export async function deleteProject(
+  userId: string,
+  id: string,
+): Promise<boolean> {
+  const result = await db
+    .delete(projects)
+    .where(and(eq(projects.id, id), eq(projects.userId, userId)))
+    .returning()
+  return result.length > 0
 }

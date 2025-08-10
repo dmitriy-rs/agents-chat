@@ -10,7 +10,11 @@ export const projectsRelations = relations(projects, ({ many }) => ({
   chats: many(chats),
 }))
 
-export const chatsRelations = relations(chats, ({ many }) => ({
+export const chatsRelations = relations(chats, ({ one, many }) => ({
+  project: one(projects, {
+    fields: [chats.projectId],
+    references: [projects.id],
+  }),
   messages: many(messages),
 }))
 

@@ -2,14 +2,23 @@ import type { ChatMessage, ChatMessagePart } from '../../shared/types/chat'
 import type { DBMessage, DBMessagePart } from './schema'
 import { formatISO } from 'date-fns'
 
-export function mapToUIMessage(message: DBMessage): ChatMessage {
+export function mapToUIMessage(message: DBMessage): ChatMessage
+export function mapToUIMessage(message: null | undefined): null
+export function mapToUIMessage(
+  message: DBMessage | null | undefined,
+): ChatMessage | null {
+  if (!message) {
+    return null
+  }
+
+  const { id, role, parts, createdAt, updatedAt } = message
   return {
-    id: message.id,
-    role: message.role as 'user' | 'assistant' | 'system',
-    parts: mapDBPartToUIMessagePart(message.parts),
+    id,
+    role: role as ChatMessage['role'],
+    parts: mapDBPartToUIMessagePart(parts),
     metadata: {
-      createdAt: formatISO(message.createdAt),
-      updatedAt: formatISO(message.updatedAt),
+      createdAt: formatISO(createdAt),
+      updatedAt: formatISO(updatedAt),
     },
   }
 }
