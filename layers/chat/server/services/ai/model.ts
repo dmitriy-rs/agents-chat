@@ -17,8 +17,7 @@ export function createGroqAIModel() {
 
   const groq = createGroq({ apiKey })
 
-  return (model: Parameters<typeof groq>[0] = 'qwen/qwen3-32b') =>
-    groq(model)
+  return (model: Parameters<typeof groq>[0] = 'qwen/qwen3-32b') => groq(model)
 }
 
 export function createDolphinAIModel() {
