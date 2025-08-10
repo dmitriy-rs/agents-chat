@@ -2,6 +2,9 @@ import { getAllChats } from '../../repository/chatRepository'
 
 export default defineCachedEventHandler(
   async () => {
+    const storage = useStorage('db')
+    await storage.setItem('chats:has-new-chat', false)
+
     return getAllChats()
   },
   {

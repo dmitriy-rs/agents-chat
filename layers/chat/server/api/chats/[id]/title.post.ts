@@ -17,7 +17,7 @@ export default defineLazyEventHandler(async () => {
     invariantResponse(success, 400, 'Bad Request')
     const { message } = data
 
-    const title = await generateChatTitle(model(), message)
+    const title = await generateChatTitle(model('gpt-5-mini'), message)
 
     return updateChat(chatId, {
       title,

@@ -9,26 +9,80 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core'
 import type { ChatMessage, ChatProviderMetadata } from '../../shared/types/chat'
-import { generateId } from 'ai'
 import { sql } from 'drizzle-orm'
 
-export const chats = pgTable('chats', {
-  id: varchar()
-    .primaryKey()
-    .$defaultFn(() => generateId()),
-})
+export const users = pgTable(
+  'users',
+  {
+    id: varchar()
+      .primaryKey()
+      .$defaultFn(() => uuid()),
+    email: varchar(),
+    name: varchar(),
+    provider: varchar(),
+    providerId: varchar().unique(),
+
+    createdAt: timestamp().defaultNow().notNull(),
+    updatedAt: timestamp().defaultNow().notNull(),
+  },
+  (table) => [
+    index('users_email_idx').on(table.email),
+    index('users_provider_id_idx').on(table.providerId),
+  ],
+)
+
+export const projects = pgTable(
+  'projects',
+  {
+    id: varchar()
+      .primaryKey()
+      .$defaultFn(() => uuid()),
+    userId: varchar()
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    name: varchar().notNull(),
+
+    createdAt: timestamp().defaultNow().notNull(),
+    updatedAt: timestamp().defaultNow().notNull(),
+  },
+  (table) => [index('projects_user_id_idx').on(table.userId)],
+)
+
+export const chats = pgTable(
+  'chats',
+  {
+    id: varchar()
+      .primaryKey()
+      .$defaultFn(() => uuid()),
+    userId: varchar()
+      .references(() => users.id, { onDelete: 'cascade' })
+      .notNull(),
+    projectId: varchar().references(() => projects.id, { onDelete: 'cascade' }),
+    title: varchar().notNull(),
+
+    createdAt: timestamp().defaultNow().notNull(),
+    updatedAt: timestamp().defaultNow().notNull(),
+  },
+  (table) => [
+    index('chats_user_id_idx').on(table.userId),
+    index('chats_project_id_idx').on(table.projectId),
+    index('chats_user_id_project_id_idx').on(table.userId, table.projectId),
+  ],
+)
 
 export const messages = pgTable(
   'messages',
   {
     id: varchar()
       .primaryKey()
-      .$defaultFn(() => generateId()),
+      .$defaultFn(() => uuid()),
     chatId: varchar()
       .references(() => chats.id, { onDelete: 'cascade' })
       .notNull(),
-    createdAt: timestamp().defaultNow().notNull(),
     role: varchar().$type<ChatMessage['role']>().notNull(),
+
+    createdAt: timestamp().defaultNow().notNull(),
+    updatedAt: timestamp().defaultNow().notNull(),
   },
   (table) => [
     index('messages_chat_id_idx').on(table.chatId),
@@ -41,7 +95,7 @@ export const parts = pgTable(
   {
     id: varchar()
       .primaryKey()
-      .$defaultFn(() => generateId()),
+      .$defaultFn(() => uuid()),
     messageId: varchar()
       .references(() => messages.id, { onDelete: 'cascade' })
       .notNull(),

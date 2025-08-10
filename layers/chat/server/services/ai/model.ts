@@ -17,7 +17,7 @@ export function createGroqAIModel() {
 
   const groq = createGroq({ apiKey })
 
-  return (model: Parameters<typeof groq>[0] = 'openai/gpt-oss-20b') =>
+  return (model: Parameters<typeof groq>[0] = 'qwen/qwen3-32b') =>
     groq(model)
 }
 

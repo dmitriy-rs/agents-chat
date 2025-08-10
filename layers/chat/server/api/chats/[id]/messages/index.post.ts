@@ -1,14 +1,14 @@
 import { getMessagesByChatId } from '../../../../repository/messagesRepository'
-import { createChatModel } from '../../../../services/ai/model'
 import { streamChatResponse } from '../../../../services/ai/llm'
 import { JsonToSseTransformStream } from 'ai'
 import { createMessageForChat } from '../../../../repository/chatRepository'
 import { mapToUIMessage } from '../../../../db/mapper'
 import { CreateMessageSchema } from '../../../../schemas'
 import { invariantResponse } from '../../../../utils'
+import { createOpenAIModel } from '../../../../services/ai/model'
 
 export default defineLazyEventHandler(async () => {
-  const model = createChatModel()
+  const model = createOpenAIModel()
 
   return defineEventHandler(async (event) => {
     const { id: chatId } = getRouterParams(event)
@@ -28,7 +28,7 @@ export default defineLazyEventHandler(async () => {
     const messages = dbMessages.map(mapToUIMessage)
 
     const stream = await streamChatResponse({
-      model: model(),
+      model: model('gpt-4o'),
       messages,
       onFinish: async ({ responseMessage }) => {
         await createMessageForChat(chatId, responseMessage)
