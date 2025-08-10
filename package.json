@@ -17,13 +17,13 @@
   },
   "dependencies": {
     "@ai-sdk/groq": "^2.0.4",
-    "@ai-sdk/openai": "2.0.7",
-    "@ai-sdk/vue": "2.0.8",
+    "@ai-sdk/openai": "2.0.8",
+    "@ai-sdk/vue": "2.0.9",
     "@nuxt/eslint": "1.8.0",
     "@nuxt/image": "^1.11.0",
     "@nuxt/ui": "^3.3.0",
     "@vueuse/core": "^13.6.0",
-    "ai": "^5.0.8",
+    "ai": "^5.0.9",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.44.4",
     "eslint": "^9.33.0",
@@ -32,7 +32,7 @@
     "retro-sound": "^1.0.4",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1",
-    "zod": "^4.0.15"
+    "zod": "^4.0.17"
   },
   "devDependencies": {
     "@nuxtjs/mdc": "^0.17.2",

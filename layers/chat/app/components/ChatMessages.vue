@@ -24,7 +24,10 @@ defineProps<{
         class="break-words whitespace-pre-wrap"
       >
         <span v-if="part.type === 'text'">
-          <MarkdownRenderer :content="part.text" />
+          <MarkdownRenderer
+            :content="part.text"
+            :cache-key="`${message.id}-${part.type}-${index}`"
+          />
         </span>
       </div>
     </div>

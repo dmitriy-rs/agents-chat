@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { content } = defineProps<{ content: string }>()
+const { content } = defineProps<{ content: string; cacheKey: string }>()
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ast = ref<any>({ body: [], data: {} })
 
@@ -15,7 +15,12 @@ ast.value = await parseMarkdown(content)
 </script>
 
 <template>
-  <MDCRenderer :body="ast.body" :data="ast.data" class="markdown-content" />
+  <MDCRenderer
+    :cache-key="cacheKey"
+    :body="ast.body"
+    :data="ast.data"
+    class="markdown-content"
+  />
 </template>
 
 <style>
