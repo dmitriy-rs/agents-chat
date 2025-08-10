@@ -7,7 +7,7 @@ import type {
 import db from '../db'
 import { chats, projects, messages, parts } from '../db/schema'
 import { eq, desc, and } from 'drizzle-orm'
-import { createMessageByChatId } from './messagesRepository'
+import { upsertMessageByChatId } from './messagesRepository'
 import { mapToUIMessage } from '../db/mapper'
 import {
   type PaginationOptions,
@@ -124,7 +124,7 @@ export async function createMessageForChat(
     where: and(eq(chats.id, chatId), eq(chats.userId, userId)),
   })
   if (!chat) return
-  await createMessageByChatId(chatId, data)
+  await upsertMessageByChatId(userId, chatId, data)
   await db
     .update(chats)
     .set({ updatedAt: new Date() })

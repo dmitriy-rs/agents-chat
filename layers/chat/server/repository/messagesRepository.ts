@@ -1,64 +1,59 @@
-import { MOCK_MESSAGES } from '../../shared/utils/mockData'
 import type { DBMessage } from '../db/schema'
-import type { ChatMessage } from '../../shared/types/chat'
-import { mapToDBMessage } from '../db/mapper'
-
-const storage = useStorage<DBMessage[]>('db')
-const messagesKey = 'messages:all'
-
-async function getMessages() {
-  let messages = await storage.getItem(messagesKey)
-
-  if (!messages) {
-    messages = MOCK_MESSAGES
-    await saveMessages(messages)
-  }
-
-  return messages
-}
-
-async function saveMessages(messages: DBMessage[]) {
-  await storage.setItem(messagesKey, messages)
-}
-
-export async function getLastMessageByChatId(
-  chatId: string,
-): Promise<DBMessage | null> {
-  const messages = await getMessages()
-  const chatMessages = messages.filter(
-    (m) => m.chatId === chatId && m.role === 'user',
-  )
-  if (!chatMessages || chatMessages.length === 0) return null
-  return chatMessages.reduce((latest, msg) =>
-    msg.createdAt > latest.createdAt ? msg : latest,
-  )
-}
-
-export async function deleteMessagesByChatId(chatId: string) {
-  const messages = await getMessages()
-  for (let i = messages.length - 1; i >= 0; i--) {
-    if (messages[i].chatId === chatId) {
-      messages.splice(i, 1)
-    }
-  }
-  await saveMessages(messages)
-}
+import type { ChatId, ChatMessage, UserId } from '../../shared/types/chat'
+import db from '../db'
+import { chats, messages, parts } from '../db/schema'
+import { eq, desc, and } from 'drizzle-orm'
+import { mapToDBMessage, mapUIMessagePartsToDBParts } from '../db/mapper'
 
 export async function getMessagesByChatId(
-  chatId: string,
+  userId: UserId,
+  chatId: ChatId,
 ): Promise<DBMessage[]> {
-  const messages = await getMessages()
-  const chatMessages = messages.filter((m) => m.chatId === chatId)
-  return chatMessages ?? []
+  const chat = await db.query.chats.findFirst({
+    where: and(eq(chats.id, chatId), eq(chats.userId, userId)),
+  })
+  if (!chat) return []
+
+  return db.query.messages.findMany({
+    where: eq(messages.chatId, chatId),
+    orderBy: desc(messages.createdAt),
+    with: { parts: true },
+  })
 }
 
-export async function createMessageByChatId(
-  chatId: string,
+export async function upsertMessageByChatId(
+  userId: UserId,
+  chatId: ChatId,
   message: ChatMessage,
-): Promise<DBMessage | null> {
-  const newMessage = mapToDBMessage(chatId, message)
-  const messages = await getMessages()
-  messages.push(newMessage)
-  await saveMessages(messages)
-  return newMessage
+): Promise<void> {
+  const chat = await db.query.chats.findFirst({
+    where: and(eq(chats.id, chatId), eq(chats.userId, userId)),
+  })
+  if (!chat) return
+
+  await db.transaction(async (tx) => {
+    const newMessage = mapToDBMessage(chatId, message)
+    // Upsert message: insert or update on conflict by id
+    const [upserted] = await tx
+      .insert(messages)
+      .values({
+        id: newMessage.id,
+        chatId: newMessage.chatId,
+        role: newMessage.role,
+      })
+      .onConflictDoUpdate({
+        target: messages.id,
+        set: {
+          chatId: newMessage.chatId,
+          role: newMessage.role,
+        },
+      })
+      .returning()
+    if (!upserted) return null
+    // Remove all parts for this message
+    await tx.delete(parts).where(eq(parts.messageId, upserted.id))
+    // Insert new parts
+    const partRows = mapUIMessagePartsToDBParts(message.parts, upserted.id)
+    if (partRows.length) await tx.insert(parts).values(partRows)
+  })
 }

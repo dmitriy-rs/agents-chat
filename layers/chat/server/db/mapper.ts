@@ -2,15 +2,7 @@ import type { ChatMessage, ChatMessagePart } from '../../shared/types/chat'
 import type { DBMessage, DBMessagePart } from './schema'
 import { formatISO } from 'date-fns'
 
-export function mapToUIMessage(message: DBMessage): ChatMessage
-export function mapToUIMessage(message: null | undefined): null
-export function mapToUIMessage(
-  message: DBMessage | null | undefined,
-): ChatMessage | null {
-  if (!message) {
-    return null
-  }
-
+export function mapToUIMessage(message: DBMessage): ChatMessage {
   const { id, role, parts, createdAt, updatedAt } = message
   return {
     id,
