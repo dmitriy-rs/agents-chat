@@ -10,6 +10,7 @@ import {
 } from 'drizzle-orm/pg-core'
 import type { ChatMessage, ChatProviderMetadata } from '../../shared/types/chat'
 import { sql } from 'drizzle-orm'
+import { uuid } from '../../shared/utils/utils'
 
 export const users = pgTable(
   'users',

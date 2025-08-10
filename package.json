@@ -10,6 +10,9 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint . && prettier . --check --log-level silent",
     "lint:fix": "eslint . --fix && prettier ./app ./layers --write --log-level silent",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "bun ./layers/chat/server/db/seed.ts",
     "prepare": "husky"
   },
   "dependencies": {
